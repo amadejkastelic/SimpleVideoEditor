@@ -1,0 +1,35 @@
+- part:
+      path: ../res/sample_fhd.mp4
+      start: 11
+      end: 15
+      type: VIDEO
+      audio:
+          path: ../res/sample.mp3
+          start: 11
+      text:
+          - part:
+                value: video test center
+                position: CENTER
+                size: 50
+                font: Fira Code
+                color: white
+          - part:
+                value: video test bottom
+                position: BOTTOM
+                size: 50
+                font: Fira Code
+                color: white
+- part:
+      path: ../res/sample_fhd.jpg
+      length: 5
+      type: IMAGE
+      audio:
+          path: ../res/sample.mp3
+          start: 21
+      text:
+          - part:
+                value: photo test bottom left
+                position: bottom_left
+                size: 50
+                font: Fira Code
+                color: white

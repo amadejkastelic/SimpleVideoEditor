@@ -1,0 +1,4 @@
+/opt/projects/svpeditor/cmake-build-debug/CMakeFiles/edit_cache.dir
+/opt/projects/svpeditor/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/opt/projects/svpeditor/cmake-build-debug/CMakeFiles/svpeditor.dir
+/opt/projects/svpeditor/cmake-build-debug/CMakeFiles/svpeditor_autogen.dir
