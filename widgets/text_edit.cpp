@@ -11,6 +11,7 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
 
 MyTextEdit::MyTextEdit(const QString &text, QWidget *parent) : QTextEdit(text, parent) {
     setFont();
+    setAcceptRichText(false);
 }
 
 void MyTextEdit::setFont() {
