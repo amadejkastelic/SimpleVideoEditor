@@ -78,6 +78,8 @@ void Editor::Preview() {
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &Editor::updateSlider);
 
+    video->SetTimer(timer);
+
     player->Reader(timeline);
     player->Play();
     timer->start(1000);
@@ -95,9 +97,11 @@ void Editor::playPause() {
     if (player->Mode() == PLAYBACK_PAUSED) {
         playPauseButton->setIcon(QIcon("../icons/pause.png"));
         player->Play();
+        timer->start();
     } else if (player->Mode() == PLAYBACK_PLAY) {
         playPauseButton->setIcon(QIcon("../icons/play.png"));
         player->Pause();
+        timer->stop();
     }
 }
 

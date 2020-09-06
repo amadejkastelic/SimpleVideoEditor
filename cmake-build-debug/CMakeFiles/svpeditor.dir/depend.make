@@ -2172,6 +2172,7 @@ CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/libopenshot/RendererB
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/libopenshot/Settings.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/libopenshot/ZmqLogger.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/QString
+CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/QTimer
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/QVector
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qalgorithms.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qarraydata.h
@@ -2180,6 +2181,7 @@ CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qatomic_boo
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qatomic_cxx11.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qatomic_msvc.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qbasicatomic.h
+CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qbasictimer.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qbytearray.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qbytearraylist.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qchar.h
@@ -2241,6 +2243,7 @@ CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qsysinfo.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qsystemdetection.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qtcore-config.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qtextstream.h
+CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qtimer.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qtypeinfo.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qurl.h
 CMakeFiles/svpeditor.dir/widgets/video.cpp.o: /usr/include/qt/QtCore/qurlquery.h

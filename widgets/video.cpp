@@ -1,7 +1,8 @@
 #include "video.h"
 
-MyVideoWidget::MyVideoWidget(QWidget *parent, QtPlayer *player) : VideoRenderWidget(parent) {
+MyVideoWidget::MyVideoWidget(QWidget *parent, QtPlayer *player, QTimer *timer) : VideoRenderWidget(parent) {
     m_player = player;
+    m_timer = timer;
 }
 
 void MyVideoWidget::SetPlayer(QtPlayer *player) {
@@ -26,13 +27,19 @@ void MyVideoWidget::keyPressEvent(QKeyEvent *event) {
 }
 
 void MyVideoWidget::PlayPause() {
-    if (m_player == nullptr) {
+    if (m_player == nullptr || m_timer == nullptr) {
         return;
     }
 
     if (m_player->Mode() == PLAYBACK_PAUSED || m_player->Mode() == PLAYBACK_STOPPED) {
         m_player->Play();
+        m_timer->start();
     } else if (m_player->Mode() == PLAYBACK_PLAY) {
         m_player->Pause();
+        m_timer->stop();
     }
+}
+
+void MyVideoWidget::SetTimer(QTimer *timer) {
+    m_timer = timer;
 }

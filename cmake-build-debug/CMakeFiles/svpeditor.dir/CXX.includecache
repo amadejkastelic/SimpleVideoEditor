@@ -6,6 +6,44 @@
 
 #IncludeRegexTransform: 
 
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/EWIEGA46WW/moc_editor.cpp
+memory
+-
+../../../editor.h
+/opt/projects/svpeditor/editor.h
+QtCore/qbytearray.h
+-
+QtCore/qmetatype.h
+-
+
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/IMAN36LHMA/moc_text_edit.cpp
+memory
+-
+../../../widgets/text_edit.h
+/opt/projects/svpeditor/widgets/text_edit.h
+QtCore/qbytearray.h
+-
+QtCore/qmetatype.h
+-
+
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/IMAN36LHMA/moc_video.cpp
+memory
+-
+../../../widgets/video.h
+/opt/projects/svpeditor/widgets/video.h
+QtCore/qbytearray.h
+-
+QtCore/qmetatype.h
+-
+
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/mocs_compilation.cpp
+EWIEGA46WW/moc_editor.cpp
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/EWIEGA46WW/moc_editor.cpp
+IMAN36LHMA/moc_text_edit.cpp
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/IMAN36LHMA/moc_text_edit.cpp
+IMAN36LHMA/moc_video.cpp
+/opt/projects/svpeditor/cmake-build-debug/svpeditor_autogen/IMAN36LHMA/moc_video.cpp
+
 /opt/projects/svpeditor/data/audio_file.h
 file.h
 /opt/projects/svpeditor/data/file.h
@@ -86,6 +124,12 @@ QProgressBar
 QTimer
 -
 
+/opt/projects/svpeditor/main.cpp
+editor.h
+/opt/projects/svpeditor/editor.h
+libopenshot/OpenShot.h
+-
+
 /opt/projects/svpeditor/parser.h
 yaml-cpp/yaml.h
 /opt/projects/svpeditor/yaml-cpp/yaml.h
@@ -116,12 +160,18 @@ QFont
 QKeyEvent
 -
 
+/opt/projects/svpeditor/widgets/video.cpp
+video.h
+/opt/projects/svpeditor/widgets/video.h
+
 /opt/projects/svpeditor/widgets/video.h
 libopenshot/Qt/VideoRenderWidget.h
 /opt/projects/svpeditor/widgets/libopenshot/Qt/VideoRenderWidget.h
 QMouseEvent
 -
 QtPlayer.h
+-
+QTimer
 -
 
 /usr/include/libopenshot-audio/AppConfig.h
