@@ -42,8 +42,17 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     layout->addLayout(inputGrid);
 
     setLayout(layout);
+    setWindowFlag(Qt::Window);
 
-    timeline = new Timeline(1920, 1080, Fraction(24, 1), 44100, 2, ChannelLayout::LAYOUT_STEREO);
+    buildMenuBar(this);
+
+    timeline = new Timeline(
+            settings.value("video/width", 1920).toInt(),
+            settings.value("video/height", 1080).toInt(),
+            Fraction(settings.value("video/fps", 24).toInt(), 1),
+            settings.value("audio/sample_rate", 44100).toInt(),
+            2,
+            ChannelLayout::LAYOUT_STEREO);
 
     connect(previewButton, &QPushButton::clicked, this, &Editor::Preview);
     connect(renderButton, SIGNAL(clicked()), this, SLOT(Save()));
@@ -53,7 +62,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
 }
 
 void Editor::seek(int seconds) {
-    player->Seek(seconds * 24);
+    player->Seek(seconds * settings.value("video/fps", 24).toInt());
 }
 
 void Editor::Preview() {
@@ -63,7 +72,13 @@ void Editor::Preview() {
         player->Stop();
         timer->stop();
 
-        timeline = new Timeline(1920, 1080, Fraction(24, 1), 44100, 2, ChannelLayout::LAYOUT_STEREO);
+        timeline = new Timeline(
+                settings.value("video/width", 1920).toInt(),
+                settings.value("video/height", 1080).toInt(),
+                Fraction(settings.value("video/fps", 24).toInt(), 1),
+                settings.value("audio/sample_rate", 44100).toInt(),
+                2,
+                ChannelLayout::LAYOUT_STEREO);
     }
 
     previewButton->setEnabled(false);
@@ -113,13 +128,28 @@ void Editor::Save() {
     previewButton->setEnabled(false);
 
     FFmpegWriter writer("../out/output.mp4");
-    writer.SetAudioOptions(true, "libvorbis", 44100, 2, ChannelLayout::LAYOUT_STEREO, 128000);
-    writer.SetVideoOptions(true, "mpeg4", Fraction(24, 1), 1920, 1080, Fraction(1, 1), false, false, 3000000);
+    writer.SetAudioOptions(
+            true,
+            settings.value("audio/codec", "libvorbis").toString().toStdString(),
+            settings.value("audio/sample_rate", 44100).toInt(),
+            2,
+            ChannelLayout::LAYOUT_STEREO,
+            128000);
+    writer.SetVideoOptions(
+            true,
+            settings.value("video/codec", "mpeg4").toString().toStdString(),
+            Fraction(settings.value("video/fps", 24).toInt(), 1),
+            settings.value("video/width", 1920).toInt(),
+            settings.value("video/height", 1080).toInt(),
+            Fraction(1, 1),
+            false,
+            false,
+            settings.value("video/bitrate", 3000000).toInt());
 
     writer.Open();
 
     cerr << "Writing frames..." << endl;
-    writer.WriteFrame(timeline, 1, videoLength * 24);
+    writer.WriteFrame(timeline, 1, videoLength * settings.value("video/fps", 24).toInt());
 
     writer.Close();
 
@@ -138,5 +168,24 @@ void Editor::updateSlider() {
 }
 
 void Editor::syncSlider() {
-    player->Seek(slider->value() * 24);
+    player->Seek(slider->value() * settings.value("video/fps", 24).toInt());
+}
+
+void Editor::buildMenuBar(QWidget *parent) {
+    auto *menuBar = new QMenuBar(parent);
+    menuBar->setNativeMenuBar(true);
+
+    auto *fileMenu = new QMenu("File");
+    auto *settingsAction = new QAction("Settings");
+    connect(settingsAction, &QAction::triggered, this, &Editor::OpenSettings);
+    fileMenu->addAction(settingsAction);
+
+    menuBar->addMenu(fileMenu);
+}
+
+void Editor::OpenSettings() {
+    auto *settingsEditor = new SettingsEditor();
+    settingsEditor->resize(400, 300);
+    settingsEditor->setWindowTitle("Settings");
+    settingsEditor->show();
 }

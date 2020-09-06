@@ -17,16 +17,21 @@
 #include <QProgressDialog>
 #include <QProgressBar>
 #include <QTimer>
+#include <QSettings>
+#include <QMenuBar>
+#include <QMenu>
+#include "widgets/settings.h"
 
 class Editor : public QWidget {
 
     Q_OBJECT
 
 public:
-    explicit Editor(QWidget *parent = 0);
+    explicit Editor(QWidget *parent = nullptr);
     void playPause();
     void updateSlider();
     void syncSlider();
+    void buildMenuBar(QWidget *parent);
 
 public Q_SLOTS:
     void seek(int seconds);
@@ -34,6 +39,7 @@ public Q_SLOTS:
 private slots:
     void Preview();
     void Save();
+    void OpenSettings();
 
 private:
     QPushButton *playPauseButton;
@@ -46,4 +52,5 @@ private:
     Timeline *timeline;
     uint videoLength;
     QTimer *timer;
+    QSettings settings;
 };

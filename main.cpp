@@ -14,11 +14,13 @@ int main(int argc, char *argv[]) {
     setHardwareAccel();
 
     Editor editor;
-
     editor.resize(800, 600);
     editor.setWindowTitle("SVEditor");
     editor.show();
     //editor.playPause();
+
+    QCoreApplication::setOrganizationName("AK");
+    QCoreApplication::setApplicationName("SVEditor");
 
     return QApplication::exec();
 }

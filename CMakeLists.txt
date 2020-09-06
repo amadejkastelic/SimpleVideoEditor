@@ -13,6 +13,6 @@ find_package(Qt5MultimediaWidgets REQUIRED)
 include_directories("/usr/include/libopenshot-audio")
 include_directories("/usr/include/libopenshot")
 
-add_executable(svpeditor main.cpp editor.h editor.cpp data/file.cpp data/file.h data/video_file.cpp data/video_file.h data/image_file.cpp data/image_file.h parser.cpp parser.h renderer.cpp renderer.h data/files.h data/audio_file.cpp data/audio_file.h widgets/text_edit.cpp widgets/text_edit.h widgets/video.cpp widgets/video.h data/text.cpp data/text.h)
+add_executable(svpeditor main.cpp editor.h editor.cpp data/file.cpp data/file.h data/video_file.cpp data/video_file.h data/image_file.cpp data/image_file.h parser.cpp parser.h renderer.cpp renderer.h data/files.h data/audio_file.cpp data/audio_file.h widgets/text_edit.cpp widgets/text_edit.h widgets/video.cpp widgets/video.h data/text.cpp data/text.h widgets/settings.cpp widgets/settings.h)
 
 target_link_libraries(svpeditor Qt5::Widgets Qt5::Multimedia Qt5::MultimediaWidgets yaml-cpp openshot-audio openshot)
