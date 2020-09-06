@@ -11,6 +11,9 @@ void setHardwareAccel() {
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
+    QCoreApplication::setOrganizationName("AK");
+    QCoreApplication::setApplicationName("SVEditor");
+
     setHardwareAccel();
 
     Editor editor;
@@ -18,9 +21,6 @@ int main(int argc, char *argv[]) {
     editor.setWindowTitle("SVEditor");
     editor.show();
     //editor.playPause();
-
-    QCoreApplication::setOrganizationName("AK");
-    QCoreApplication::setApplicationName("SVEditor");
 
     return QApplication::exec();
 }

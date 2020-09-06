@@ -54,6 +54,9 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
             2,
             ChannelLayout::LAYOUT_STEREO);
 
+    cerr << "Width: " << settings.value("video/width", 1920).toInt() << endl;
+    cerr << "Height: " << settings.value("video/height", 1080).toInt() << endl;
+
     connect(previewButton, &QPushButton::clicked, this, &Editor::Preview);
     connect(renderButton, SIGNAL(clicked()), this, SLOT(Save()));
     connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
@@ -188,4 +191,10 @@ void Editor::OpenSettings() {
     settingsEditor->resize(400, 300);
     settingsEditor->setWindowTitle("Settings");
     settingsEditor->show();
+}
+
+void Editor::closeEvent(QCloseEvent *event) {
+    QWidget::closeEvent(event);
+    // TODO: maybe save data?
+    QCoreApplication::quit();
 }

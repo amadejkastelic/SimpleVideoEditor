@@ -41,6 +41,9 @@ private slots:
     void Save();
     void OpenSettings();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private:
     QPushButton *playPauseButton;
     QPushButton *previewButton;
