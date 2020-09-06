@@ -36,7 +36,7 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     auto *videoBitrateLabel = new QLabel("Bitrate:");
     videoBitrateInput = new QLineEdit();
     videoBitrateInput->setText(settings.value("video/bitrate", 24).toString());
-    videoBitrateInput->setValidator(new QIntValidator(1, 1000));
+    videoBitrateInput->setValidator(new QIntValidator(1, 1000000));
     videoBitrateBox->addWidget(videoBitrateLabel);
     videoBitrateBox->addWidget(videoBitrateInput);
 
@@ -52,7 +52,7 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     auto *audioSampleRateBox = new QHBoxLayout();
     auto *audioSampleRateLabel = new QLabel("Sample rate:");
     audioSampleRateInput = new QLineEdit();
-    audioSampleRateInput->setValidator(new QIntValidator(1, 10000));
+    audioSampleRateInput->setValidator(new QIntValidator(1, 1000000));
     audioSampleRateInput->setText(settings.value("audio/sample_rate", 44100).toString());
     audioSampleRateBox->addWidget(audioSampleRateLabel);
     audioSampleRateBox->addWidget(audioSampleRateInput);

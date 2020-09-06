@@ -71,7 +71,7 @@ void Editor::seek(int seconds) {
 void Editor::Preview() {
     if (timeline->IsOpen()) {
         timeline->Close();
-        timeline->ClearAllCache();
+        //timeline->ClearAllCache();
         player->Stop();
         timer->stop();
 
@@ -99,6 +99,7 @@ void Editor::Preview() {
     video->SetTimer(timer);
 
     player->Reader(timeline);
+    player->Loading();
     player->Play();
     timer->start(1000);
 
@@ -126,6 +127,7 @@ void Editor::playPause() {
 void Editor::Save() {
     auto *dialog = new QProgressDialog(this, Qt::Window);
     dialog->setLabelText("Rendering...");
+    dialog->show();
 
     renderButton->setEnabled(false);
     previewButton->setEnabled(false);
@@ -155,6 +157,7 @@ void Editor::Save() {
     writer.WriteFrame(timeline, 1, videoLength * settings.value("video/fps", 24).toInt());
 
     writer.Close();
+    dialog->close();
 
     cerr << "Done writing file." << endl;
 
@@ -166,7 +169,6 @@ void Editor::updateSlider() {
     if (slider->value() == slider->maximum()) {
         timer->stop();
     }
-    cerr << "test" << endl;
     slider->setValue(slider->value() + 1);
 }
 
