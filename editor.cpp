@@ -5,6 +5,8 @@ using namespace std;
 
 Editor::Editor(QWidget *parent) : QWidget(parent) {
     videoLength = 0;
+    cursorLine = 0;
+    reader = nullptr;
 
     playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
     previewButton = new QPushButton("Preview", this);
@@ -62,6 +64,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
     connect(slider, &QSlider::sliderMoved, this, &Editor::seek);
     connect(slider, &QSlider::sliderPressed, this, &Editor::syncSlider);
+    connect(input, &MyTextEdit::cursorPositionChanged, this, &Editor::PreviewOnCursor);
 }
 
 void Editor::seek(int seconds) {
@@ -199,4 +202,47 @@ void Editor::closeEvent(QCloseEvent *event) {
     QWidget::closeEvent(event);
     // TODO: maybe save data?
     QCoreApplication::quit();
+}
+
+void Editor::PreviewOnCursor() {
+    QTextCursor cursor = input->textCursor();
+    if (cursorLine == cursor.blockNumber()) {
+        return;
+    }
+    cerr << "Cursor position changed... Old: " << cursorLine << " New: " << cursor.blockNumber() << endl;
+    cursorLine = cursor.blockNumber();
+    QString line = cursor.block().text().trimmed();
+    if (line.contains("path:") && line.split(":").length() == 2) {
+        string path = line.split(":")[1].trimmed().toStdString();
+        cerr << "Path: " << path << endl;
+        if (!fopen(path.c_str(), "r")) {
+            cerr << "File doesn't exist." << endl;
+        }
+
+        if (reader != nullptr && reader->IsOpen()) {
+            player->Stop();
+            player->Loading();
+            timer->stop();
+            reader->Close();
+        }
+
+        reader = new FFmpegReader(path);
+        reader->Open();
+
+        timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, &Editor::updateSlider);
+
+        video->SetTimer(timer);
+
+        player->Reader(reader);
+        player->Loading();
+        player->Play();
+        timer->start(1000);
+
+        //playPauseButton->setEnabled(true);
+
+        slider->setRange(0, (int) reader->info.duration);
+        slider->setEnabled(true);
+        slider->setSliderPosition(0);
+    }
 }

@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QSlider>
 #include <iostream>
+#include <fstream>
 #include "widgets/text_edit.h"
 #include "parser.h"
 #include "renderer.h"
@@ -18,6 +19,7 @@
 #include <QProgressBar>
 #include <QTimer>
 #include <QSettings>
+#include <QTextBlock>
 #include <QMenuBar>
 #include <QMenu>
 #include "widgets/settings.h"
@@ -40,6 +42,7 @@ private slots:
     void Preview();
     void Save();
     void OpenSettings();
+    void PreviewOnCursor();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -56,4 +59,6 @@ private:
     uint videoLength;
     QTimer *timer;
     QSettings settings;
+    uint cursorLine;
+    FFmpegReader *reader;
 };
