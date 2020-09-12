@@ -1,5 +1,5 @@
 - označena pot do videa -> preview ✅
-- video mute, če ima dodan audio + volume
+- video mute, če ima dodan audio ✅ + volume
 - interaktivno (vrstica z fontom vidiš na levi vse fonte)
 - barve (odpre paleto)
 - slika/video opcija za crop/fit/fill

@@ -20,6 +20,7 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
                 audio->Start((float) videoFile->GetAudioFile()->GetStart());
                 audio->End((float) videoFile->GetAudioFile()->GetEnd());
                 audio->Layer(layer++);
+                clip->volume = 0;
                 timeline->AddClip(audio);
             }
 

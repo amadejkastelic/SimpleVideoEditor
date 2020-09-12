@@ -5,6 +5,8 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include <QMediaPlayer>
+#include <QCompleter>
+#include <QFileSystemModel>
 #include <QVideoWidget>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -61,4 +63,6 @@ private:
     QSettings settings;
     uint cursorLine;
     FFmpegReader *reader;
+    QCompleter *font_completer;
+    QCompleter *path_completer;
 };

@@ -13,6 +13,24 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     renderButton = new QPushButton("Save", this);
     input = new MyTextEdit("", this);
 
+    path_completer = new QCompleter(input);
+    path_completer->setWidget(input);
+    auto *model = new QFileSystemModel(path_completer);
+    model->setRootPath(QDir::currentPath());
+    path_completer->setModel(model);
+    path_completer->setCompletionMode(QCompleter::PopupCompletion);
+    path_completer->setCaseSensitivity(Qt::CaseSensitive);
+    connect(path_completer, QOverload<const QString &>::of(&QCompleter::activated), input,
+            &MyTextEdit::insertCompletion);
+
+    QFontDatabase fonts;
+    font_completer = new QCompleter(fonts.families(), input);
+    font_completer->setWidget(input);
+    font_completer->setCompletionMode(QCompleter::PopupCompletion);
+    font_completer->setCaseSensitivity(Qt::CaseInsensitive);
+    connect(font_completer, QOverload<const QString &>::of(&QCompleter::activated), input,
+            &MyTextEdit::insertCompletion);
+
     renderButton->setEnabled(false);
 
     video = new MyVideoWidget(this);
@@ -72,6 +90,12 @@ void Editor::seek(int seconds) {
 }
 
 void Editor::Preview() {
+    if (reader->IsOpen()) {
+        timer->stop();
+        player->Stop();
+        reader->Close();
+    }
+
     if (timeline->IsOpen()) {
         timeline->Close();
         //timeline->ClearAllCache();
@@ -206,13 +230,17 @@ void Editor::closeEvent(QCloseEvent *event) {
 
 void Editor::PreviewOnCursor() {
     QTextCursor cursor = input->textCursor();
-    if (cursorLine == cursor.blockNumber()) {
-        return;
-    }
     cerr << "Cursor position changed... Old: " << cursorLine << " New: " << cursor.blockNumber() << endl;
-    cursorLine = cursor.blockNumber();
     QString line = cursor.block().text().trimmed();
     if (line.contains("path:") && line.split(":").length() == 2) {
+        if (input->completer() != path_completer) {
+            input->setCompleter(path_completer);
+        }
+
+        if (cursorLine == cursor.blockNumber() && reader != nullptr && reader->IsOpen()) {
+            return;
+        }
+
         string path = line.split(":")[1].trimmed().toStdString();
         cerr << "Path: " << path << endl;
         if (!fopen(path.c_str(), "r")) {
@@ -244,5 +272,13 @@ void Editor::PreviewOnCursor() {
         slider->setRange(0, (int) reader->info.duration);
         slider->setEnabled(true);
         slider->setSliderPosition(0);
+    } else if (line.contains("font:")) {
+        if (input->completer() != font_completer) {
+            input->setCompleter(font_completer);
+        }
+    } else {
+        input->setCompleter(nullptr);
     }
+
+    cursorLine = cursor.blockNumber();
 }
