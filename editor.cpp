@@ -8,6 +8,9 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     cursorLine = 0;
     reader = nullptr;
 
+    colorPicker = new QColorDialog(this);
+    connect(colorPicker, &QColorDialog::colorSelected, this, &Editor::ColorSelected);
+
     playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
     previewButton = new QPushButton("Preview", this);
     renderButton = new QPushButton("Save", this);
@@ -90,7 +93,7 @@ void Editor::seek(int seconds) {
 }
 
 void Editor::Preview() {
-    if (reader->IsOpen()) {
+    if (reader != nullptr && reader->IsOpen()) {
         timer->stop();
         player->Stop();
         reader->Close();
@@ -276,9 +279,28 @@ void Editor::PreviewOnCursor() {
         if (input->completer() != font_completer) {
             input->setCompleter(font_completer);
         }
+    } else if (line.contains("color:")) {
+        input->setCompleter(nullptr);
+        if (colorPicker != nullptr && colorPicker->isVisible()) {
+            return;
+        }
+
+        colorPicker->open();
     } else {
         input->setCompleter(nullptr);
     }
 
     cursorLine = cursor.blockNumber();
+}
+
+void Editor::ColorSelected() {
+    input->moveCursor(QTextCursor::MoveOperation::EndOfLine);
+    QTextCursor cursor = input->textCursor();
+    QString line = cursor.block().text().trimmed();
+    cerr << line.toStdString() << endl;
+    while (line.contains(":")) {
+        cursor.deletePreviousChar();
+        line = cursor.block().text().trimmed();
+    }
+    input->insertPlainText(": " + colorPicker->selectedColor().name(QColor::NameFormat::HexArgb).toUpper().mid(1));
 }

@@ -26,7 +26,7 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
 
             for (Text *text: videoFile->GetText()) {
                 auto *font = new QFont(QString::fromStdString(text->GetFont()), text->GetSize(), 1, false);
-                Clip *textClip = new Clip(new QtTextReader(1920, 1080, 0, 0, text->GetPosition(), text->GetValue(), *font, text->GetColor(), "transparent"));
+                Clip *textClip = new Clip(new QtTextReader(1920, 1080, 0, 0, text->GetPosition(), text->GetValue(), *font, "#" + text->GetColor(), "transparent"));
                 textClip->Position((float) length);
                 textClip->Start(0.0);
                 textClip->End((float) videoFile->GetEnd() - videoFile->GetStart());

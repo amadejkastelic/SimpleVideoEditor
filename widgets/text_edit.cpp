@@ -108,8 +108,3 @@ void MyTextEdit::focusInEvent(QFocusEvent *event) {
 void MyTextEdit::setCompleter(QCompleter *completer) {
     m_completer = completer;
 }
-
-void MyTextEdit::dropEvent(QDropEvent *event) {
-    MyTextEdit::insertPlainText("test");
-    event->acceptProposedAction();
-}

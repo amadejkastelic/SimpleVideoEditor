@@ -1,7 +1,7 @@
 - označena pot do videa -> preview ✅
 - video mute, če ima dodan audio ✅ + volume
-- interaktivno (vrstica z fontom vidiš na levi vse fonte)
-- barve (odpre paleto)
+- interaktivno (vrstica z fontom vidiš na levi vse fonte) - autofill ✅ 
+- barve (odpre paleto) ✅
 - slika/video opcija za crop/fit/fill
 - velika slika 3d effekt (zoom v sliko počasi)
 - github build

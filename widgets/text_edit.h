@@ -30,5 +30,4 @@ public slots:
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void focusInEvent(QFocusEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
 };

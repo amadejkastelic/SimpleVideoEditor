@@ -10,6 +10,7 @@
 #include <QVideoWidget>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QColorDialog>
 #include <QSlider>
 #include <iostream>
 #include <fstream>
@@ -45,6 +46,7 @@ private slots:
     void Save();
     void OpenSettings();
     void PreviewOnCursor();
+    void ColorSelected();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -65,4 +67,5 @@ private:
     FFmpegReader *reader;
     QCompleter *font_completer;
     QCompleter *path_completer;
+    QColorDialog *colorPicker;
 };
