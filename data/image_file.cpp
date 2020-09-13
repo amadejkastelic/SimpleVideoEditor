@@ -1,10 +1,11 @@
 #include "image_file.h"
 #include <utility>
 
-ImageFile::ImageFile(string path, uint length, AudioFile *audio, vector<Text *> text) : File(std::move(path)) {
+ImageFile::ImageFile(string path, uint length, AudioFile *audio, vector<Text *> text, ScaleType scale) : File(std::move(path)) {
     m_length = length;
     m_audio = audio;
     m_text = std::move(text);
+    m_scale = scale;
 }
 
 uint ImageFile::GetLength() const {
@@ -17,4 +18,8 @@ AudioFile *ImageFile::GetAudioFile() {
 
 vector<Text *> ImageFile::GetText() {
     return m_text;
+}
+
+ScaleType ImageFile::getScale() {
+    return m_scale;
 }

@@ -1,11 +1,12 @@
 #include "video_file.h"
 #include <utility>
 
-VideoFile::VideoFile(string path, uint start, uint end, AudioFile *audio, vector<Text *> text) : File(std::move(path)) {
+VideoFile::VideoFile(string path, uint start, uint end, AudioFile *audio, vector<Text *> text, ScaleType scale): File(std::move(path)) {
     m_start = start;
     m_end = end;
     m_audio = audio;
     m_text = std::move(text);
+    m_scale = scale;
 }
 
 uint VideoFile::GetStart() const {
@@ -22,4 +23,8 @@ vector<Text *> VideoFile::GetText() {
 
 AudioFile *VideoFile::GetAudioFile() {
     return m_audio;
+}
+
+ScaleType VideoFile::GetScale() {
+    return m_scale;
 }

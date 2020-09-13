@@ -9,7 +9,21 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
             if (instruction.IsMap()) {
                 string type = instruction["part"]["type"].as<string>();
                 string path = instruction["part"]["path"].as<string>();
+                ScaleType scale = SCALE_NONE;
                 vector<Text *> text;
+
+                if (instruction["part"]["scale"].IsDefined()) {
+                    QString scaleString = QString::fromStdString(instruction["part"]["scale"].as<string>()).toUpper();
+                    if (scaleString == "CROP") {
+                        scale = SCALE_CROP;
+                    } else if (scaleString == "FIT") {
+                        scale = SCALE_FIT;
+                    } else if (scaleString == "STRETCH") {
+                        scale = SCALE_STRETCH;
+                    } else {
+                        scale = SCALE_NONE;
+                    }
+                }
 
                 YAML::Node labels = instruction["part"]["text"];
                 if (labels.IsSequence()) {
@@ -32,7 +46,7 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                         uint audioStart = instruction["part"]["audio"]["start"].as<uint>();
                         audio = new AudioFile(audioPath, audioStart, audioStart + end - start);
                     }
-                    result.push_back(new VideoFile(path, start, end, audio, text));
+                    result.push_back(new VideoFile(path, start, end, audio, text, scale));
                 } else if (type == "IMAGE") {
                     uint length = instruction["part"]["length"].as<uint>();
                     AudioFile *audio = nullptr;
@@ -41,7 +55,7 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                         uint audioStart = instruction["part"]["audio"]["start"].as<uint>();
                         audio = new AudioFile(audioPath, audioStart, audioStart + length);
                     }
-                    result.push_back(new ImageFile(path, length, audio, text));
+                    result.push_back(new ImageFile(path, length, audio, text, scale));
                 }
             }
         }
