@@ -63,7 +63,7 @@ private:
     uint videoLength;
     QTimer *timer;
     QSettings settings;
-    uint cursorLine;
+    int cursorLine;
     FFmpegReader *reader;
     QCompleter *font_completer;
     QCompleter *path_completer;

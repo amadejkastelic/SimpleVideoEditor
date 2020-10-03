@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName("AK");
     QCoreApplication::setApplicationName("SVEditor");
 
-    setHardwareAccel();
+    //setHardwareAccel();
 
     Editor editor;
     editor.resize(800, 600);
