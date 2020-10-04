@@ -76,6 +76,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
             settings.value("audio/sample_rate", 44100).toInt(),
             2,
             ChannelLayout::LAYOUT_STEREO);
+    timeline->SetCache(new CacheMemory(settings.value("timeline/cache_size", 0).toInt()));
 
     cerr << "Width: " << settings.value("video/width", 1920).toInt() << endl;
     cerr << "Height: " << settings.value("video/height", 1080).toInt() << endl;
@@ -112,6 +113,7 @@ void Editor::Preview() {
                 settings.value("audio/sample_rate", 44100).toInt(),
                 2,
                 ChannelLayout::LAYOUT_STEREO);
+        timeline->SetCache(new CacheMemory(settings.value("timeline/cache_size", 0).toInt()));
     }
 
     previewButton->setEnabled(false);
