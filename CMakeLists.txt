@@ -30,6 +30,7 @@ install(TARGETS svpeditor DESTINATION bin)
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_GENERATOR "DEB")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt5gui5 libopenshot-dev libopenshot-audio-dev libyaml-cpp-dev libqt5multimediawidgets5")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Amadej Kastelic")
 set(CPACK_PACKAGE_NAME "SimpleVideoEditor")
 set(CPACK_PACKAGE_VENDOR "AmadejKastelic")
