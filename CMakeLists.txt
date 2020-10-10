@@ -29,11 +29,11 @@ set_target_properties(svpeditor PROPERTIES AUTORCC TRUE)
 set_target_properties(svpeditor PROPERTIES AUTOMOC TRUE)
 
 target_include_directories(svpeditor PUBLIC
-        $<BUILD_INTERFACE:/home/amadejk/Downloads/libopenshot-audio/test/include/libopenshot-audio>
-        $<INSTALL_INTERFACE:/home/amadejk/Downloads/libopenshot-audio/test/include/libopenshot-audio>)
+        $<BUILD_INTERFACE:/usr/include/libopenshot-audio>
+        $<INSTALL_INTERFACE:/usr/include/libopenshot-audio>)
 target_include_directories(svpeditor PUBLIC
-        $<BUILD_INTERFACE:/home/amadejk/Downloads/libopenshot/test/include/libopenshot>
-        $<INSTALL_INTERFACE:/home/amadejk/Downloads/libopenshot/test/include/libopenshot>)
+        $<BUILD_INTERFACE:/usr/include/libopenshot>
+        $<INSTALL_INTERFACE:/usr/include/libopenshot>)
 target_link_libraries(svpeditor PRIVATE
         Qt5::Core
         Qt5::Gui
