@@ -7,3 +7,7 @@
 - `cmake -B build -S .`
 - `cmake --build build`
 - `cd build && ./svpeditor`
+
+## Usage
+- [Example](https://github.com/amadejkastelic/SimpleVideoEditor/blob/master/test.yml)
+- TODO: attribute description
