@@ -11,7 +11,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     colorPicker = new QColorDialog(this);
     connect(colorPicker, &QColorDialog::colorSelected, this, &Editor::ColorSelected);
 
-    playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
+    //playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
     previewButton = new QPushButton("Preview", this);
     renderButton = new QPushButton("Save", this);
     input = new MyTextEdit("", this);
@@ -44,16 +44,18 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     player->Volume(50);
     //player->Loading();
 
-    playPauseButton->setMaximumWidth(30);
-    playPauseButton->setEnabled(false);
+    //playPauseButton->setMaximumWidth(30);
+    //playPauseButton->setEnabled(false);
 
     slider = new QSlider(Qt::Orientation::Horizontal, this);
     slider->setEnabled(false);
 
-    auto *previewGrid = new QGridLayout();
+    previewGrid = new QGridLayout();
     previewGrid->addWidget(video);
     //previewGrid->addWidget(playPauseButton);
     previewGrid->addWidget(slider);
+
+    //InitVideoPreviewWidget();
 
     auto *inputGrid = new QGridLayout();
     inputGrid->addWidget(input);
@@ -83,7 +85,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
 
     connect(previewButton, &QPushButton::clicked, this, &Editor::Preview);
     connect(renderButton, SIGNAL(clicked()), this, SLOT(Save()));
-    connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
+    //connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
     connect(slider, &QSlider::sliderMoved, this, &Editor::seek);
     connect(slider, &QSlider::sliderPressed, this, &Editor::syncSlider);
     connect(input, &MyTextEdit::cursorPositionChanged, this, &Editor::PreviewOnCursor);
@@ -94,6 +96,7 @@ void Editor::seek(int seconds) {
 }
 
 void Editor::Preview() {
+    InitVideoPreviewWidget();
     if (reader != nullptr && reader->IsOpen()) {
         timer->stop();
         player->Stop();
@@ -164,7 +167,7 @@ void Editor::Save() {
     renderButton->setEnabled(false);
     previewButton->setEnabled(false);
 
-    FFmpegWriter writer("../out/output.mp4");
+    FFmpegWriter writer("output.mp4");
     writer.SetAudioOptions(
             true,
             settings.value("audio/codec", "libvorbis").toString().toStdString(),
@@ -234,6 +237,7 @@ void Editor::closeEvent(QCloseEvent *event) {
 }
 
 void Editor::PreviewOnCursor() {
+    InitVideoPreviewWidget();
     QTextCursor cursor = input->textCursor();
     cerr << "Cursor position changed... Old: " << cursorLine << " New: " << cursor.blockNumber() << endl;
     QString line = cursor.block().text().trimmed();
@@ -305,4 +309,21 @@ void Editor::ColorSelected() {
         line = cursor.block().text().trimmed();
     }
     input->insertPlainText(": " + colorPicker->selectedColor().name(QColor::NameFormat::HexArgb).toUpper().mid(1));
+}
+
+void Editor::InitVideoPreviewWidget() {
+    if (video != nullptr) {
+        return;
+    }
+    video = new MyVideoWidget(this);
+    video->setMinimumSize(400, 150);
+    player = new QtPlayer(video->GetRenderer());
+    video->SetPlayer(player);
+    player->SetQWidget(reinterpret_cast<uintptr_t>(video));
+    player->Volume(50);
+    player->Loading();
+
+    previewGrid->addWidget(video);
+    //previewGrid->addWidget(playPauseButton);
+    previewGrid->addWidget(slider);
 }

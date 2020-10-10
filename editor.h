@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QWidget>
 #include <QApplication>
+#include <QWidget>
 #include <QTextEdit>
 #include <QPushButton>
 #include <QMediaPlayer>
@@ -47,6 +47,7 @@ private slots:
     void OpenSettings();
     void PreviewOnCursor();
     void ColorSelected();
+    void InitVideoPreviewWidget();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -68,4 +69,5 @@ private:
     QCompleter *font_completer;
     QCompleter *path_completer;
     QColorDialog *colorPicker;
+    QGridLayout *previewGrid;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "libopenshot/Qt/VideoRenderWidget.h"
+#include "video_render_widget.h"
 #include <QMouseEvent>
 #include <QtPlayer.h>
 #include <QTimer>

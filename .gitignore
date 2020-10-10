@@ -6,3 +6,11 @@ cmake-build-debug/
 out/
 
 cmake-build-release/
+
+_deps/
+
+CMakeFiles/
+
+svpeditor_autogen/
+
+build/

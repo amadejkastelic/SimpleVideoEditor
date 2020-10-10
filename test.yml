@@ -1,10 +1,10 @@
 - part:
-    path: ../res/sample_fhd.mp4
+    path: /opt/projects/svpeditor/res/sample_fhd.mp4
     start: 11
     end: 15
     type: VIDEO
     audio:
-      path: ../res/sample.mp3
+      path: /opt/projects/svpeditor/res/sample.mp3
       start: 11
     text:
       - part:
@@ -20,7 +20,7 @@
           font: Fira Code
           color: FF00AAFF
 - part:
-    path: ../res/sample_fhd.jpg
+    path: /opt/projects/svpeditor/res/sample_fhd.jpg
     length: 5
     type: IMAGE
     audio:
