@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.14)
 project(svpeditor LANGUAGES CXX VERSION 1.0.0)
 
 #set(CMAKE_CXX_STANDARD 14)
@@ -16,8 +16,7 @@ find_package(Qt5 REQUIRED COMPONENTS
         Core
         Gui
         Multimedia
-        MultimediaWidgets
-        QuickCompiler)
+        MultimediaWidgets)
 #find_package(Qt5 QUIET COMPONENTS QmlWorkerScript)
 find_package(ImageMagick REQUIRED)
 find_package(yaml-cpp REQUIRED)

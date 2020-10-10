@@ -241,7 +241,7 @@ void Editor::PreviewOnCursor() {
     QTextCursor cursor = input->textCursor();
     cerr << "Cursor position changed... Old: " << cursorLine << " New: " << cursor.blockNumber() << endl;
     QString line = cursor.block().text().trimmed();
-    if (line.contains("path:") && line.split(":").length() == 2) {
+    if (line.contains("path:") && line.trimmed().split(":").length() == 2) {
         if (input->completer() != path_completer) {
             input->setCompleter(path_completer);
         }
@@ -254,6 +254,7 @@ void Editor::PreviewOnCursor() {
         cerr << "Path: " << path << endl;
         if (!fopen(path.c_str(), "r")) {
             cerr << "File doesn't exist." << endl;
+            return;
         }
 
         if (reader != nullptr && reader->IsOpen()) {
@@ -263,8 +264,12 @@ void Editor::PreviewOnCursor() {
             reader->Close();
         }
 
-        reader = new FFmpegReader(path);
-        reader->Open();
+        try {
+            reader = new FFmpegReader(path);
+            reader->Open();
+        } catch (...) {
+            return;
+        }
 
         timer = new QTimer(this);
         connect(timer, &QTimer::timeout, this, &Editor::updateSlider);
