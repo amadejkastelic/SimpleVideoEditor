@@ -23,6 +23,8 @@
     path: /opt/projects/svpeditor/res/sample_fhd.jpg
     length: 5
     type: IMAGE
+    scale: FIT
+    animation: zoom
     audio:
       path: ../res/sample.mp3
       start: 21

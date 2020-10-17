@@ -14,11 +14,11 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
 
                 if (instruction["part"]["scale"].IsDefined()) {
                     QString scaleString = QString::fromStdString(instruction["part"]["scale"].as<string>()).toUpper();
-                    if (scaleString == "CROP") {
+                    if (boost::iequals(scaleString.toStdString(), "crop")) {
                         scale = SCALE_CROP;
-                    } else if (scaleString == "FIT") {
+                    } else if (boost::iequals(scaleString.toStdString(), "fit")) {
                         scale = SCALE_FIT;
-                    } else if (scaleString == "STRETCH") {
+                    } else if (boost::iequals(scaleString.toStdString(), "stretch")) {
                         scale = SCALE_STRETCH;
                     } else {
                         scale = SCALE_NONE;
@@ -49,13 +49,14 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                     result.push_back(new VideoFile(path, start, end, audio, text, scale));
                 } else if (type == "IMAGE") {
                     uint length = instruction["part"]["length"].as<uint>();
+                    string animation = instruction["part"]["animation"].as<string>();
                     AudioFile *audio = nullptr;
                     if (instruction["part"]["audio"].IsMap()) {
                         string audioPath = instruction["part"]["audio"]["path"].as<string>();
                         uint audioStart = instruction["part"]["audio"]["start"].as<uint>();
                         audio = new AudioFile(audioPath, audioStart, audioStart + length);
                     }
-                    result.push_back(new ImageFile(path, length, audio, text, scale));
+                    result.push_back(new ImageFile(path, length, audio, text, scale, animation));
                 }
             }
         }

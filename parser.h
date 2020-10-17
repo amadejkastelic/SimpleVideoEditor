@@ -4,6 +4,7 @@
 #include <iostream>
 #include "data/image_file.h"
 #include "data/video_file.h"
+#include <boost/algorithm/string/predicate.hpp>
 
 class Parser {
 

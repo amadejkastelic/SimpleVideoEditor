@@ -9,8 +9,8 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
             clip->Position((float) length);
             clip->Start((float) videoFile->GetStart());
             clip->End((float) videoFile->GetEnd());
-            clip->gravity = GRAVITY_TOP_LEFT;
-            clip->scale = SCALE_FIT;
+            clip->gravity = GRAVITY_CENTER;
+            clip->scale = videoFile->GetScale();
             clip->Layer(layer++);
             timeline->AddClip(clip);
 
@@ -36,14 +36,32 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
 
             length += (videoFile->GetEnd() - videoFile->GetStart());
         } else if (auto* imageFile = dynamic_cast<ImageFile*>(file)) {
-            Clip *clip = new Clip(new QtImageReader(imageFile->GetPath()));
-            clip->Position((float) length);
-            clip->Start(0.0);
-            clip->End((float) imageFile->GetLength());
-            clip->gravity = GRAVITY_TOP_LEFT;
-            clip->scale = SCALE_FIT;
-            clip->Layer(layer++);
-            timeline->AddClip(clip);
+            if (boost::iequals(imageFile->GetAnimation(), "zoom")) {
+                for (size_t i=0; i<imageFile->GetLength()*100; i+=1) {
+                    Clip *clip = new Clip(new QtImageReader(imageFile->GetPath()));
+                    float x = i/100.0f;
+                    clip->Position((float) (length + x));
+                    clip->Start(0.0);
+                    clip->End(0.01f);
+                    clip->gravity = GRAVITY_CENTER;
+                    clip->scale = imageFile->GetScale();
+                    clip->Layer(layer++);
+                    clip->scale_x = Keyframe(1.0 + x/10);
+                    clip->scale_y = Keyframe(1.0 + x/10);
+                    timeline->AddClip(clip);
+                }
+            } else {
+                Clip *clip = new Clip(new QtImageReader(imageFile->GetPath()));
+                clip->Position((float) length);
+                clip->Start(0.0);
+                clip->End((float) imageFile->GetLength());
+                clip->gravity = GRAVITY_CENTER;
+                clip->scale = imageFile->GetScale();
+                clip->Layer(layer++);
+                clip->scale_x = Keyframe(2);
+                clip->scale_y = Keyframe(2);
+                timeline->AddClip(clip);
+            }
 
             if (imageFile->GetAudioFile() != nullptr) {
                 Clip *audio = new Clip(new FFmpegReader(imageFile->GetAudioFile()->GetPath()));

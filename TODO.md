@@ -3,5 +3,5 @@
 - interaktivno (vrstica z fontom vidiš na levi vse fonte) - autofill ✅ 
 - barve (odpre paleto) ✅
 - slika/video opcija za crop/fit/fill ✅ 
-- velika slika 3d effekt (zoom v sliko počasi)
+- velika slika 3d effekt (zoom v sliko počasi) ✅
 - github build

@@ -12,11 +12,13 @@ private:
     AudioFile *m_audio;
     vector<Text *> m_text;
     ScaleType m_scale;
+    string m_animation;
 
 public:
-    ImageFile(string path, uint length, AudioFile *audio = nullptr, vector<Text *> text = vector<Text *>(), ScaleType scale = SCALE_NONE);
+    ImageFile(string path, uint length, AudioFile *audio = nullptr, vector<Text *> text = vector<Text *>(), ScaleType scale = SCALE_NONE, string animation = "");
     uint GetLength() const;
     AudioFile* GetAudioFile();
     vector<Text *> GetText();
-    ScaleType getScale();
+    ScaleType GetScale();
+    string GetAnimation();
 };
