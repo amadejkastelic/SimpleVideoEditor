@@ -119,10 +119,25 @@ void Editor::Preview() {
         timeline->SetCache(new CacheMemory(settings.value("timeline/cache_size", 0).toInt()));
     }
 
+    vector<spv::File*> files;
+    try {
+        files = Parser::ParseYaml(input->toPlainText().toStdString());
+        videoLength = Renderer::render(files, timeline);
+    } catch (...) {
+        return;
+    }
+
+    if (videoLength == 0) {
+        QMessageBox dialog(this);
+        dialog.setWindowTitle("Error");
+        dialog.setText("Parsing error...");
+        dialog.exec();
+        return;
+    }
+
     previewButton->setEnabled(false);
     renderButton->setEnabled(true);
-    vector<spv::File*> files = Parser::ParseYaml(input->toPlainText().toStdString());
-    videoLength = Renderer::render(files, timeline);
+
     cerr << "Number of clips in timeline: " << timeline->Clips().size() << endl;
     cerr << "Timeline length (frames): " << timeline->info.video_length << endl;
     cerr << "Timeline length (s): " << timeline->info.duration << endl;

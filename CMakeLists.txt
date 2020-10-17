@@ -16,7 +16,8 @@ find_package(Qt5 REQUIRED COMPONENTS
         Core
         Gui
         Multimedia
-        MultimediaWidgets)
+        MultimediaWidgets
+        QuickControls2)
 #find_package(Qt5 QUIET COMPONENTS QmlWorkerScript)
 find_package(ImageMagick REQUIRED)
 find_package(yaml-cpp REQUIRED)
@@ -37,7 +38,8 @@ target_link_libraries(svpeditor PRIVATE
         Qt5::Core
         Qt5::Gui
         Qt5::Multimedia
-        Qt5::MultimediaWidgets)
+        Qt5::MultimediaWidgets
+        Qt5::QuickControls2)
 target_link_libraries(svpeditor PRIVATE openshot-audio openshot yaml-cpp)
 
 get_target_property(QT_TARGET_TYPE Qt5::Core TYPE)

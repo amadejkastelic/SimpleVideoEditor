@@ -26,6 +26,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include "widgets/settings.h"
+#include <QMessageBox>
 
 class Editor : public QWidget {
 
