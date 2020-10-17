@@ -11,6 +11,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QColorDialog>
+#include <QFontDialog>
 #include <QSlider>
 #include <iostream>
 #include <fstream>
@@ -48,6 +49,7 @@ private slots:
     void OpenSettings();
     void PreviewOnCursor();
     void ColorSelected();
+    void FontSelected();
     void InitVideoPreviewWidget();
 
 protected:
@@ -70,5 +72,6 @@ private:
     QCompleter *font_completer;
     QCompleter *path_completer;
     QColorDialog *colorPicker;
+    QFontDialog *fontPicker;
     QGridLayout *previewGrid;
 };

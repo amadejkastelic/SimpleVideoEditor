@@ -11,6 +11,9 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     colorPicker = new QColorDialog(this);
     connect(colorPicker, &QColorDialog::colorSelected, this, &Editor::ColorSelected);
 
+    fontPicker = new QFontDialog(this);
+    connect(fontPicker, &QFontDialog::fontSelected, this, &Editor::FontSelected);
+
     //playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
     previewButton = new QPushButton("Preview", this);
     renderButton = new QPushButton("Save", this);
@@ -311,8 +314,16 @@ void Editor::PreviewOnCursor() {
         slider->setEnabled(true);
         slider->setSliderPosition(0);
     } else if (line.contains("font:")) {
-        if (input->completer() != font_completer) {
+        /*if (input->completer() != font_completer) {
             input->setCompleter(font_completer);
+        }*/
+        input->setCompleter(nullptr);
+        if (fontPicker != nullptr && fontPicker->isVisible()) {
+            return;
+        }
+
+        if (cursorLine != cursor.blockNumber()) {
+            fontPicker->open();
         }
     } else if (line.contains("color:")) {
         input->setCompleter(nullptr);
@@ -338,6 +349,18 @@ void Editor::ColorSelected() {
         line = cursor.block().text().trimmed();
     }
     input->insertPlainText(": " + colorPicker->selectedColor().name(QColor::NameFormat::HexArgb).toUpper().mid(1));
+}
+
+void Editor::FontSelected() {
+    input->moveCursor(QTextCursor::MoveOperation::EndOfLine);
+    QTextCursor cursor = input->textCursor();
+    QString line = cursor.block().text().trimmed();
+    cerr << line.toStdString() << endl;
+    while (line.contains(":")) {
+        cursor.deletePreviousChar();
+        line = cursor.block().text().trimmed();
+    }
+    input->insertPlainText(": " + fontPicker->selectedFont().family());
 }
 
 void Editor::InitVideoPreviewWidget() {
