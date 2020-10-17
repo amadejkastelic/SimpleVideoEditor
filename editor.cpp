@@ -63,8 +63,13 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     inputGrid->addWidget(renderButton);
 
     auto *layout = new QHBoxLayout(this);
-    layout->addLayout(previewGrid);
-    layout->addLayout(inputGrid);
+    if (settings.value("view/layout", "Left") == QString("Left")) {
+        layout->addLayout(previewGrid);
+        layout->addLayout(inputGrid);
+    } else {
+        layout->addLayout(inputGrid);
+        layout->addLayout(previewGrid);
+    }
 
     setLayout(layout);
     setWindowFlag(Qt::Window);
@@ -96,6 +101,10 @@ void Editor::seek(int seconds) {
 }
 
 void Editor::Preview() {
+    if (input->toPlainText().length() == 0) {
+        return;
+    }
+
     InitVideoPreviewWidget();
     if (reader != nullptr && reader->IsOpen()) {
         timer->stop();
@@ -128,9 +137,9 @@ void Editor::Preview() {
     }
 
     if (videoLength == 0) {
-        QMessageBox dialog(this);
+        QErrorMessage dialog(this);
         dialog.setWindowTitle("Error");
-        dialog.setText("Parsing error...");
+        dialog.showMessage("Parsing error...");
         dialog.exec();
         return;
     }

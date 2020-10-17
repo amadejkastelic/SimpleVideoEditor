@@ -9,6 +9,12 @@
 #include <QSettings>
 #include <QPushButton>
 #include <QComboBox>
+#include <QApplication>
+#include <QProcess>
+#include <QMessageBox>
+#include <iostream>
+
+using namespace std;
 
 class SettingsEditor : public QWidget {
 
@@ -21,6 +27,9 @@ private slots:
     void Save();
 
 private:
+    void ShowRestartDialog();
+
+private:
     QSettings settings;
     QLineEdit *videoWidthInput;
     QLineEdit *videoHeightInput;
@@ -29,4 +38,5 @@ private:
     QComboBox *videoCodecSelect;
     QLineEdit *audioSampleRateInput;
     QComboBox *audioCodecSelect;
+    QComboBox *previewPositionSelect;
 };

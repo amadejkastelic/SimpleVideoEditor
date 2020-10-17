@@ -5,6 +5,7 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
 
     auto *videoSection = new QLabel("Video Options");
     auto *audioSection = new QLabel("Audio Options");
+    auto *viewSection = new QLabel("View Options");
 
     // VIDEO
 
@@ -64,6 +65,22 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     audioCodecBox->addWidget(audioCodecLabel);
     audioCodecBox->addWidget(audioCodecSelect);
 
+    // VIEW
+    auto *previewPositionBox = new QHBoxLayout();
+    auto *previewPositionLabel = new QLabel("Preview position:");
+    previewPositionSelect = new QComboBox();
+    if (settings.value("view/layout") == QString("Left")) {
+        previewPositionSelect->addItem("Left", QVariant(QVariant::Type::String));
+        previewPositionSelect->addItem("Right", QVariant(QVariant::Type::String));
+    } else {
+        previewPositionSelect->addItem("Right", QVariant(QVariant::Type::String));
+        previewPositionSelect->addItem("Left", QVariant(QVariant::Type::String));
+    }
+    previewPositionBox->addWidget(previewPositionLabel);
+    previewPositionBox->addWidget(previewPositionSelect);
+
+    // END
+
     auto *saveButton = new QPushButton("Save");
     connect(saveButton, &QPushButton::clicked, this, &SettingsEditor::Save);
 
@@ -80,6 +97,9 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     layout->addWidget(audioSection);
     layout->addLayout(audioSampleRateBox);
     layout->addLayout(audioCodecBox);
+
+    layout->addWidget(viewSection);
+    layout->addLayout(previewPositionBox);
 
     layout->addSpacing(10);
     layout->addWidget(saveButton);
@@ -111,5 +131,26 @@ void SettingsEditor::Save() {
         settings.setValue("audio/codec", audioCodecSelect->currentText());
     }
 
+    if (previewPositionSelect->currentText() != settings.value("view/layout", "Left")) {
+        cerr << previewPositionSelect->currentText().toStdString() << endl;
+        settings.setValue("view/layout", previewPositionSelect->currentText());
+        settings.sync();
+        ShowRestartDialog();
+    }
+
     close();
+}
+
+void SettingsEditor::ShowRestartDialog() {
+    QMessageBox dialog(this);
+    dialog.setWindowTitle("Settings");
+    dialog.setText("You have to restart the app for changes to take effect.");
+    dialog.setInformativeText("Restart now?");
+    dialog.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    dialog.setDefaultButton(QMessageBox::Ok);
+    int ret = dialog.exec();
+    if (ret == QMessageBox::Ok) {
+        QApplication::quit();
+        QProcess::startDetached(QApplication::arguments()[0], QApplication::arguments());
+    }
 }
