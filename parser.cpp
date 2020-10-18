@@ -13,7 +13,7 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                 vector<Text *> text;
 
                 if (instruction["part"]["scale"].IsDefined()) {
-                    QString scaleString = QString::fromStdString(instruction["part"]["scale"].as<string>()).toUpper();
+                    QString scaleString = QString::fromStdString(instruction["part"]["scale"].as<string>());
                     if (boost::iequals(scaleString.toStdString(), "crop")) {
                         scale = SCALE_CROP;
                     } else if (boost::iequals(scaleString.toStdString(), "fit")) {
@@ -49,7 +49,7 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                     result.push_back(new VideoFile(path, start, end, audio, text, scale));
                 } else if (type == "IMAGE") {
                     uint length = instruction["part"]["length"].as<uint>();
-                    string animation = instruction["part"]["animation"].as<string>();
+                    string animation = instruction["part"]["animation"].as<string>("none");
                     AudioFile *audio = nullptr;
                     if (instruction["part"]["audio"].IsMap()) {
                         string audioPath = instruction["part"]["audio"]["path"].as<string>();
