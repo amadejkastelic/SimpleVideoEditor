@@ -132,10 +132,18 @@ void Editor::Preview() {
     }
 
     vector<spv::File*> files;
+    QProgressDialog progressDialog("", "", 0, 0, this);
+    progressDialog.setCancelButton(nullptr);
+    progressDialog.setValue(0);
+    progressDialog.setWindowTitle("Rendering...");
+    progressDialog.setWindowModality(Qt::WindowModal);
+
     try {
         files = Parser::ParseYaml(input->toPlainText().toStdString());
         videoLength = Renderer::render(files, timeline);
+        progressDialog.cancel();
     } catch (...) {
+        progressDialog.cancel();
         return;
     }
 

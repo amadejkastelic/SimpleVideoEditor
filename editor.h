@@ -28,6 +28,7 @@
 #include <QMenu>
 #include "widgets/settings.h"
 #include <QErrorMessage>
+#include <QtConcurrent/QtConcurrent>
 
 class Editor : public QWidget {
 
