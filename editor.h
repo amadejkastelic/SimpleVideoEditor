@@ -27,6 +27,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include "widgets/settings.h"
+#include "widgets/highlighter.h"
 #include <QErrorMessage>
 #include <QtConcurrent/QtConcurrent>
 
@@ -75,4 +76,5 @@ private:
     QColorDialog *colorPicker;
     QFontDialog *fontPicker;
     QGridLayout *previewGrid;
+    Highlighter *highlighter;
 };

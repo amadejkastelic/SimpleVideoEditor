@@ -91,6 +91,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     cerr << "Width: " << settings.value("video/width", 1920).toInt() << endl;
     cerr << "Height: " << settings.value("video/height", 1080).toInt() << endl;
 
+    highlighter = new Highlighter(input->document());
+
     connect(previewButton, &QPushButton::clicked, this, &Editor::Preview);
     connect(renderButton, SIGNAL(clicked()), this, SLOT(Save()));
     //connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
