@@ -1,4 +1,8 @@
 # Simple Video Editor
+
+## Screenshot
+![screenshot](https://raw.githubusercontent.com/amadejkastelic/SimpleVideoEditor/develop/res/screenshot.png)
+
 ## Building
 - Build libopenshot-audio and libopenshot (https://github.com/OpenShot/libopenshot/wiki/Linux-Build-Instructions)
 - `sudo apt install imagemagick libyaml-cpp-dev libboost-dev`
