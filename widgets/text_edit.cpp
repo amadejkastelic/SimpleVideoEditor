@@ -1,15 +1,6 @@
 #include "text_edit.h"
 
 void MyTextEdit::keyPressEvent(QKeyEvent *event) {
-    // save workspace
-    if (!m_workspace->isOpen()) {
-        m_workspace->open(QIODevice::ReadWrite);
-    }
-    m_workspace->resize(0);
-    QTextStream stream(m_workspace);
-    stream << MyTextEdit::toPlainText();
-    stream.flush();
-
     if (m_completer && m_completer->popup()->isVisible()) {
         switch (event->key()) {
             case Qt::Key_Enter:
@@ -124,4 +115,17 @@ void MyTextEdit::focusInEvent(QFocusEvent *event) {
 
 void MyTextEdit::setCompleter(QCompleter *completer) {
     m_completer = completer;
+}
+
+void MyTextEdit::keyReleaseEvent(QKeyEvent *event) {
+    // save workspace
+    if (!m_workspace->isOpen()) {
+        m_workspace->open(QIODevice::ReadWrite);
+    }
+    m_workspace->resize(0);
+    QTextStream stream(m_workspace);
+    stream << MyTextEdit::toPlainText();
+    stream.flush();
+    
+    QTextEdit::keyReleaseEvent(event);
 }
