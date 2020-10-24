@@ -4,6 +4,8 @@
 #include <iostream>
 #include <QTextEdit>
 #include <QFont>
+#include <QSettings>
+#include <QTextStream>
 #include <QKeyEvent>
 #include <QCompleter>
 #include <QFontDatabase>
@@ -18,6 +20,7 @@ private:
     void setFont();
     QString textUnderCursor() const;
     QCompleter *m_completer = nullptr;
+    QFile *m_workspace;
 
 public:
     explicit MyTextEdit(const QString &text, QWidget *parent = nullptr);

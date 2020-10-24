@@ -1,6 +1,15 @@
 #include "text_edit.h"
 
 void MyTextEdit::keyPressEvent(QKeyEvent *event) {
+    // save workspace
+    if (!m_workspace->isOpen()) {
+        m_workspace->open(QIODevice::ReadWrite);
+    }
+    m_workspace->resize(0);
+    QTextStream stream(m_workspace);
+    stream << MyTextEdit::toPlainText();
+    stream.flush();
+
     if (m_completer && m_completer->popup()->isVisible()) {
         switch (event->key()) {
             case Qt::Key_Enter:
@@ -57,6 +66,14 @@ MyTextEdit::MyTextEdit(const QString &text, QWidget *parent) : QTextEdit(text, p
     setAcceptDrops(true);
     setFont();
     setAcceptRichText(false);
+
+    // load workspace
+    auto settingsPath = QSettings().fileName().left(QSettings().fileName().lastIndexOf("/") + 1);
+    m_workspace = new QFile(settingsPath.append("workspace.sve"));
+    if (m_workspace->exists() && m_workspace->open(QIODevice::ReadWrite)) {
+        QTextStream stream(m_workspace);
+        setText(stream.readAll());
+    }
 }
 
 void MyTextEdit::setFont() {
