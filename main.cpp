@@ -1,5 +1,6 @@
 #include "editor.h"
 #include <libopenshot/OpenShot.h>
+#include <QtQuickControls2//QQuickStyle>
 
 using namespace std;
 using namespace openshot;
@@ -11,7 +12,7 @@ void setHardwareAccel() {
     Settings::Instance()->FF_THREADS = 24;
     Settings::Instance()->DE_LIMIT_HEIGHT_MAX = 10000;
     Settings::Instance()->DE_LIMIT_WIDTH_MAX = 10000;
-    Settings::Instance()->WAIT_FOR_VIDEO_PROCESSING_TASK = true;
+    Settings::Instance()->WAIT_FOR_VIDEO_PROCESSING_TASK = false;
 }
 
 int main(int argc, char *argv[]) {
@@ -21,7 +22,9 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName("AK");
     QCoreApplication::setApplicationName("SVEditor");
 
-    //setHardwareAccel();
+    //QQuickStyle::setStyle("Material");
+
+    setHardwareAccel();
 
     Editor editor;
     editor.resize(800, 600);
