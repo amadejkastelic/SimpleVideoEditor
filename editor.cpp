@@ -65,7 +65,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     inputGrid->addWidget(previewButton);
     inputGrid->addWidget(renderButton);
 
-    auto *layout = new QHBoxLayout(this);
+    auto *layout = new QHBoxLayout();
+    layout->setMenuBar(buildMenuBar(this));
     if (settings.value("view/layout", "Left") == QString("Left")) {
         layout->addLayout(previewGrid);
         layout->addLayout(inputGrid);
@@ -74,10 +75,9 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
         layout->addLayout(previewGrid);
     }
 
+
     setLayout(layout);
     setWindowFlag(Qt::Window);
-
-    buildMenuBar(this);
 
     timeline = new Timeline(
             settings.value("video/width", 1920).toInt(),
@@ -248,7 +248,7 @@ void Editor::syncSlider() {
     player->Seek(slider->value() * settings.value("video/fps", 24).toInt());
 }
 
-void Editor::buildMenuBar(QWidget *parent) {
+QMenuBar* Editor::buildMenuBar(QWidget *parent) const {
     auto *menuBar = new QMenuBar(parent);
     menuBar->setNativeMenuBar(true);
 
@@ -258,6 +258,8 @@ void Editor::buildMenuBar(QWidget *parent) {
     fileMenu->addAction(settingsAction);
 
     menuBar->addMenu(fileMenu);
+
+    return menuBar;
 }
 
 void Editor::OpenSettings() {

@@ -33,14 +33,14 @@
 
 class Editor : public QWidget {
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
     explicit Editor(QWidget *parent = nullptr);
     void playPause();
     void updateSlider();
     void syncSlider();
-    void buildMenuBar(QWidget *parent);
+    QMenuBar* buildMenuBar(QWidget *parent = nullptr) const;
 
 public Q_SLOTS:
     void seek(int seconds);
