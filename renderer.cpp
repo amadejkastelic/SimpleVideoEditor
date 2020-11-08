@@ -58,8 +58,6 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
                 clip->gravity = GRAVITY_CENTER;
                 clip->scale = imageFile->GetScale();
                 clip->Layer(layer++);
-                clip->scale_x = Keyframe(2);
-                clip->scale_y = Keyframe(2);
                 timeline->AddClip(clip);
             }
 
