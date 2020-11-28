@@ -14,6 +14,9 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     fontPicker = new QFontDialog(this);
     connect(fontPicker, &QFontDialog::fontSelected, this, &Editor::FontSelected);
 
+    filePicker = new QFileDialog(this);
+    connect(filePicker, &QFileDialog::fileSelected, this, &Editor::FileSelected);
+
     //playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
     previewButton = new QPushButton("Preview", this);
     renderButton = new QPushButton("Save", this);
@@ -280,8 +283,18 @@ void Editor::PreviewOnCursor() {
     QTextCursor cursor = input->textCursor();
     cerr << "Cursor position changed... Old: " << cursorLine << " New: " << cursor.blockNumber() << endl;
     QString line = cursor.block().text().trimmed();
-    if (line.contains("path:") && line.trimmed().split(":").length() == 2) {
-        if (input->completer() != path_completer) {
+    if (line.contains("path:")) {
+        input->setCompleter(nullptr);
+        if (filePicker != nullptr && filePicker->isVisible()) {
+            return;
+        }
+
+        cerr << line.toStdString() << " " << line.split(":").length() << endl;
+        if ((line.split(":").size() > 1 && line.split(":")[1].isEmpty())
+                || cursorLine != cursor.blockNumber()) {
+            filePicker->open();
+        }
+        /*if (input->completer() != path_completer) {
             input->setCompleter(path_completer);
         }
 
@@ -324,7 +337,7 @@ void Editor::PreviewOnCursor() {
 
         slider->setRange(0, (int) reader->info.duration);
         slider->setEnabled(true);
-        slider->setSliderPosition(0);
+        slider->setSliderPosition(0);*/
     } else if (line.contains("font:")) {
         /*if (input->completer() != font_completer) {
             input->setCompleter(font_completer);
@@ -373,6 +386,18 @@ void Editor::FontSelected() {
         line = cursor.block().text().trimmed();
     }
     input->insertPlainText(": " + fontPicker->selectedFont().family());
+}
+
+void Editor::FileSelected() {
+    input->moveCursor(QTextCursor::MoveOperation::EndOfLine);
+    QTextCursor cursor = input->textCursor();
+    QString line = cursor.block().text().trimmed();
+    cerr << line.toStdString() << endl;
+    while (line.contains(":")) {
+        cursor.deletePreviousChar();
+        line = cursor.block().text().trimmed();
+    }
+    input->insertPlainText(": " + filePicker->selectedFiles()[0]);
 }
 
 void Editor::InitVideoPreviewWidget() {
