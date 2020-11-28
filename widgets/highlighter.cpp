@@ -25,6 +25,12 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
     rule.pattern = QRegularExpression(QStringLiteral("[-]"));
     rule.format = startArrayFormat;
     rules.append(rule);
+
+    variableFormat.setForeground(QBrush(QColor(255, 50, 255)));
+    variableFormat.setFontWeight(QFont::Bold);
+    rule.pattern = QRegularExpression(QStringLiteral("[$][a-zA-Z-_]+"));
+    rule.format = variableFormat;
+    rules.append(rule);
 }
 
 void Highlighter::highlightBlock(const QString &text) {

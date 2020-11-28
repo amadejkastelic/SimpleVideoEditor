@@ -22,7 +22,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     path_completer = new QCompleter(input);
     path_completer->setWidget(input);
     auto *model = new QFileSystemModel(path_completer);
-    model->setRootPath(QDir::currentPath());
+    model->setRootPath(QDir::rootPath());
     path_completer->setModel(model);
     path_completer->setCompletionMode(QCompleter::PopupCompletion);
     path_completer->setCaseSensitivity(Qt::CaseSensitive);

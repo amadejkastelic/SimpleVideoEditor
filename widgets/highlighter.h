@@ -24,4 +24,5 @@ private:
     QTextCharFormat seperatorFormat;
     QTextCharFormat startArrayFormat;
     QTextCharFormat valueFormat;
+    QTextCharFormat variableFormat;
 };
