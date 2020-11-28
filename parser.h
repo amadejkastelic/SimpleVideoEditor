@@ -10,4 +10,8 @@ class Parser {
 
 public:
     static vector<spv::File*> ParseYaml(string yaml);
+
+private:
+    static int parseInt(string value, YAML::Node variables);
+    static string parseString(string value, YAML::Node variables);
 };
