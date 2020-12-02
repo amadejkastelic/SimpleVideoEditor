@@ -2,7 +2,7 @@
 
 #include <cmath>
 #include <iostream>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QFont>
 #include <QSettings>
 #include <QTextStream>
@@ -12,7 +12,7 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 
-class MyTextEdit : public QTextEdit {
+class MyTextEdit : public QPlainTextEdit {
 
     Q_OBJECT
 

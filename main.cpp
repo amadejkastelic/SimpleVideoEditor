@@ -1,6 +1,6 @@
 #include "editor.h"
 #include <libopenshot/OpenShot.h>
-#include <QtQuickControls2//QQuickStyle>
+#include <QtQuickControls2/QQuickStyle>
 
 using namespace std;
 using namespace openshot;
@@ -22,6 +22,9 @@ int main(int argc, char *argv[]) {
     QCoreApplication::setOrganizationName("AK");
     QCoreApplication::setApplicationName("SVEditor");
 
+    QSettings settings;
+    settings.setValue("app/name", "SVEditor");
+    settings.sync();
     //QQuickStyle::setStyle("Material");
 
     setHardwareAccel();

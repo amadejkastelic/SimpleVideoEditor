@@ -19,9 +19,9 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
 
     if (!m_completer || !isShortcut) {
         if (event->key() == Qt::Key_Tab) {
-            QTextEdit::insertPlainText("    ");
+            QPlainTextEdit::insertPlainText("    ");
         } else {
-            QTextEdit::keyPressEvent(event);
+            QPlainTextEdit::keyPressEvent(event);
         }
         //return;
     }
@@ -53,17 +53,16 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
     m_completer->complete(cr);
 }
 
-MyTextEdit::MyTextEdit(const QString &text, QWidget *parent) : QTextEdit(text, parent) {
+MyTextEdit::MyTextEdit(const QString &text, QWidget *parent) : QPlainTextEdit(text, parent) {
     setAcceptDrops(true);
     setFont();
-    setAcceptRichText(false);
 
     // load workspace
     auto settingsPath = QSettings().fileName().left(QSettings().fileName().lastIndexOf("/") + 1);
     m_workspace = new QFile(settingsPath.append("workspace.sve"));
     if (m_workspace->exists() && m_workspace->open(QIODevice::ReadWrite)) {
         QTextStream stream(m_workspace);
-        setText(stream.readAll());
+        setPlainText(stream.readAll());
     }
 }
 
@@ -80,8 +79,8 @@ void MyTextEdit::setFont() {
 
     font.setLetterSpacing(QFont::AbsoluteSpacing, letterSpacing);
 
-    QTextEdit::setFont(font);
-    QTextEdit::setTabStopDistance(stopWidth);
+    QPlainTextEdit::setFont(font);
+    QPlainTextEdit::setTabStopDistance(stopWidth);
 }
 
 QCompleter *MyTextEdit::completer() const {
@@ -110,7 +109,7 @@ void MyTextEdit::focusInEvent(QFocusEvent *event) {
     if (m_completer) {
         m_completer->setWidget(this);
     }
-    QTextEdit::focusInEvent(event);
+    QPlainTextEdit::focusInEvent(event);
 }
 
 void MyTextEdit::setCompleter(QCompleter *completer) {
@@ -126,6 +125,6 @@ void MyTextEdit::keyReleaseEvent(QKeyEvent *event) {
     QTextStream stream(m_workspace);
     stream << MyTextEdit::toPlainText();
     stream.flush();
-    
-    QTextEdit::keyReleaseEvent(event);
+
+    QPlainTextEdit::keyReleaseEvent(event);
 }
