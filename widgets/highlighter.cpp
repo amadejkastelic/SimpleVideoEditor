@@ -3,7 +3,7 @@
 Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
     HighlightingRule rule;
 
-    keywordFormat.setForeground(QBrush(QColor(243, 243, 73)));
+    keywordFormat.setForeground(QBrush(QColor(255, 203, 107)));
     keywordFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegularExpression(QStringLiteral("^.*?(?=:)"));
     rule.format = keywordFormat;
@@ -26,7 +26,7 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
     rule.format = startArrayFormat;
     rules.append(rule);
 
-    variableFormat.setForeground(QBrush(QColor(255, 50, 255)));
+    variableFormat.setForeground(QBrush(QColor(130, 170, 255)));
     variableFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegularExpression(QStringLiteral("[$][a-zA-Z-_]+"));
     rule.format = variableFormat;

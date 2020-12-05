@@ -20,7 +20,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     //playPauseButton = new QPushButton(QIcon("../icons/pause.png"), "", this);
     previewButton = new QPushButton("Preview", this);
     renderButton = new QPushButton("Save", this);
-    input = new MyTextEdit("", this);
+    input = new MyTextEdit(this);
 
     path_completer = new QCompleter(input);
     path_completer->setWidget(input);

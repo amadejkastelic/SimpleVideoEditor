@@ -1,6 +1,5 @@
 #include "text_edit.h"
 
-
 void MyTextEdit::keyPressEvent(QKeyEvent *event) {
     if (m_completer && m_completer->popup()->isVisible()) {
         switch (event->key()) {
@@ -54,20 +53,19 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
     m_completer->complete(cr);
 }
 
-MyTextEdit::MyTextEdit(const QString &text, QWidget *parent) : QPlainTextEdit(text, parent) {
-    highlightColor = new QColor(23, 23, 23);
-
-    lineNumberArea = new LineNumberArea(this);
-
-    connect(this, &MyTextEdit::blockCountChanged, this, &MyTextEdit::updateLineNumberAreaWidth);
-    connect(this, &MyTextEdit::updateRequest, this, &MyTextEdit::updateLineNumberArea);
-    connect(this, &MyTextEdit::cursorPositionChanged, this, &MyTextEdit::highlightCurrentLine);
-
-    updateLineNumberAreaWidth(0);
-    highlightCurrentLine();
+MyTextEdit::MyTextEdit(QWidget *parent) : QPlainTextEdit(parent) {
+    backgroundColor = new QColor(33, 33, 33);
+    selectionColor = new QColor(53, 53, 53);
+    highlightColor = new QColor(18, 18, 18);
+    lineNumberColor = new QColor(66, 66, 66);
 
     setAcceptDrops(true);
     setFont();
+
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Active, QPalette::Base, *backgroundColor);
+    this->setPalette(palette);
+    this->setBackgroundVisible(false);
 
     // load workspace
     auto settingsPath = QSettings().fileName().left(QSettings().fileName().lastIndexOf("/") + 1);
@@ -76,6 +74,16 @@ MyTextEdit::MyTextEdit(const QString &text, QWidget *parent) : QPlainTextEdit(te
         QTextStream stream(m_workspace);
         setPlainText(stream.readAll());
     }
+
+    // add line numbers
+    lineNumberArea = new LineNumberArea(this);
+
+    connect(this, &MyTextEdit::blockCountChanged, this, &MyTextEdit::updateLineNumberAreaWidth);
+    connect(this, &MyTextEdit::updateRequest, this, &MyTextEdit::updateLineNumberArea);
+    connect(this, &MyTextEdit::cursorPositionChanged, this, &MyTextEdit::highlightCurrentLine);
+
+    updateLineNumberAreaWidth(0);
+    highlightCurrentLine();
 }
 
 void MyTextEdit::setFont() {
@@ -154,7 +162,7 @@ int MyTextEdit::lineNumberAreaWidth() {
     return space;
 }
 
-void MyTextEdit::updateLineNumberAreaWidth(int newBlockCount) {
+void MyTextEdit::updateLineNumberAreaWidth(int) {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
@@ -171,24 +179,15 @@ void MyTextEdit::updateLineNumberArea(const QRect &rect, int dy) {
 }
 
 void MyTextEdit::resizeEvent(QResizeEvent *event) {
-    QList<QTextEdit::ExtraSelection> extraSelections;
+    QPlainTextEdit::resizeEvent(event);
 
-    if (!isReadOnly()) {
-        QTextEdit::ExtraSelection selection;
-
-        selection.format.setBackground(*highlightColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        extraSelections.append(selection);
-    }
-
-    setExtraSelections(extraSelections);
+    QRect cr = contentsRect();
+    lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
 void MyTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event) {
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), Qt::lightGray);
+    painter.fillRect(event->rect(), *backgroundColor);
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -198,7 +197,7 @@ void MyTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event) {
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::white);
+            painter.setPen(*lineNumberColor);
             painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
         }

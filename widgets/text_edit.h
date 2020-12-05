@@ -13,6 +13,8 @@
 #include <QScrollBar>
 #include <QPainter>
 #include <QTextBlock>
+#include <QPaintEvent>
+#include <QResizeEvent>
 
 class LineNumberArea;
 
@@ -23,11 +25,13 @@ class MyTextEdit : public QPlainTextEdit {
 private:
     QColor *backgroundColor;
     QColor *highlightColor;
+    QColor *selectionColor;
+    QColor *lineNumberColor;
     void setFont();
     QString textUnderCursor() const;
     QCompleter *m_completer = nullptr;
     QFile *m_workspace;
-    LineNumberArea *lineNumberArea;
+    QWidget *lineNumberArea;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -35,7 +39,7 @@ private slots:
     void updateLineNumberArea(const QRect &rect, int dy);
 
 public:
-    explicit MyTextEdit(const QString &text, QWidget *parent = nullptr);
+    explicit MyTextEdit(QWidget *parent = nullptr);
     void setCompleter(QCompleter *completer);
     QCompleter *completer() const;
     void lineNumberAreaPaintEvent(QPaintEvent *event);

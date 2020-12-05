@@ -1,6 +1,6 @@
 #include "editor.h"
 #include <libopenshot/OpenShot.h>
-#include <QtQuickControls2/QQuickStyle>
+#include <QApplication>
 
 using namespace std;
 using namespace openshot;
@@ -15,9 +15,9 @@ void setHardwareAccel() {
     Settings::Instance()->WAIT_FOR_VIDEO_PROCESSING_TASK = false;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argv, char **args) {
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QApplication app(argc, argv);
+    QApplication app(argv, args);
 
     QCoreApplication::setOrganizationName("AK");
     QCoreApplication::setApplicationName("SVEditor");
@@ -30,8 +30,8 @@ int main(int argc, char *argv[]) {
     setHardwareAccel();
 
     Editor editor;
-    editor.resize(800, 600);
-    editor.setWindowTitle("SVEditor");
+    editor.resize(1280, 720);
+    editor.setWindowTitle(QObject::tr("SVEditor"));
     editor.show();
     //editor.playPause();
 

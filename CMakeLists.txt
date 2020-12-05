@@ -43,7 +43,7 @@ target_link_libraries(svpeditor PRIVATE
 target_link_libraries(svpeditor PRIVATE openshot-audio openshot yaml-cpp)
 
 get_target_property(QT_TARGET_TYPE Qt5::Core TYPE)
-if(${QT_TARGET_TYPE} STREQUAL "STATIC_LIBRARY")
+if (${QT_TARGET_TYPE} STREQUAL "STATIC_LIBRARY")
     include(QtStaticCMake.cmake)
 endif()
 
