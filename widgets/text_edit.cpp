@@ -1,4 +1,5 @@
 #include "text_edit.h"
+#include "../editor.h"
 
 void MyTextEdit::keyPressEvent(QKeyEvent *event) {
     if (m_completer && m_completer->popup()->isVisible()) {
@@ -53,7 +54,9 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
     m_completer->complete(cr);
 }
 
-MyTextEdit::MyTextEdit(QWidget *parent) : QPlainTextEdit(parent) {
+MyTextEdit::MyTextEdit(Editor *editor) : QPlainTextEdit(editor) {
+    m_parent = editor;
+
     backgroundColor = new QColor(33, 33, 33);
     selectionColor = new QColor(53, 53, 53);
     highlightColor = new QColor(18, 18, 18);
@@ -77,12 +80,17 @@ MyTextEdit::MyTextEdit(QWidget *parent) : QPlainTextEdit(parent) {
 
     // add line numbers
     lineNumberArea = new LineNumberArea(this);
-
     connect(this, &MyTextEdit::blockCountChanged, this, &MyTextEdit::updateLineNumberAreaWidth);
     connect(this, &MyTextEdit::updateRequest, this, &MyTextEdit::updateLineNumberArea);
     connect(this, &MyTextEdit::cursorPositionChanged, this, &MyTextEdit::highlightCurrentLine);
-
     updateLineNumberAreaWidth(0);
+
+    // add buttons
+    buttonArea = new ButtonArea(this);
+    connect(this, &MyTextEdit::blockCountChanged, this, &MyTextEdit::updateButtonAreaWidth);
+    connect(this, &MyTextEdit::updateRequest, this, &MyTextEdit::updateButtonArea);
+    updateButtonAreaWidth(0);
+
     highlightCurrentLine();
 }
 
@@ -166,6 +174,10 @@ void MyTextEdit::updateLineNumberAreaWidth(int) {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
+void MyTextEdit::updateButtonAreaWidth(int) {
+    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+}
+
 void MyTextEdit::updateLineNumberArea(const QRect &rect, int dy) {
     if (dy) {
         lineNumberArea->scroll(0, dy);
@@ -178,11 +190,24 @@ void MyTextEdit::updateLineNumberArea(const QRect &rect, int dy) {
     }
 }
 
+void MyTextEdit::updateButtonArea(const QRect &rect, int dy) {
+    if (dy) {
+        buttonArea->scroll(0, dy);
+    } else {
+        buttonArea->update(0, rect.y(), buttonArea->width(), rect.height());
+    }
+
+    if (rect.contains(viewport()->rect())) {
+        updateButtonAreaWidth(0);
+    }
+}
+
 void MyTextEdit::resizeEvent(QResizeEvent *event) {
     QPlainTextEdit::resizeEvent(event);
 
     QRect cr = contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
+    buttonArea->setGeometry(QRect(cr.left() + lineNumberAreaWidth(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
 void MyTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event) {
@@ -209,12 +234,49 @@ void MyTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event) {
     }
 }
 
+void MyTextEdit::buttonAreaPaintEvent(QPaintEvent *event) {
+    QPainter painter(buttonArea);
+    painter.fillRect(event->rect(), *backgroundColor);
+
+    QTextBlock block = firstVisibleBlock();
+    int blockNumber = block.blockNumber();
+    int top = qRound(blockBoundingGeometry(block).translated(contentOffset()).top());
+    int bottom = top + qRound(blockBoundingRect(block).height());
+
+    while (block.isValid() && top <= event->rect().bottom()) {
+        if (block.isVisible() && bottom >= event->rect().top()) {
+            /*QString number = QString::number(blockNumber + 1);
+            painter.setPen(*lineNumberColor);
+            painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                             Qt::AlignRight, number);*/
+            if (block.text().contains("path:")) {
+                painter.setPen(*lineNumberColor); // TODO: change color
+                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                                 Qt::AlignCenter, "▶️");
+            } else if (block.text().contains("font:")) {
+                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                                 Qt::AlignCenter, "🆎");
+            } else if (block.text().contains("color:")) {
+                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                                 Qt::AlignCenter, "🎨");
+            } else if (block.text().contains("part:")) {
+                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                                 Qt::AlignCenter, "-");
+            }
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + qRound(blockBoundingRect(block).height());
+        ++blockNumber;
+    }
+}
+
 void MyTextEdit::highlightCurrentLine() {
     QList<QTextEdit::ExtraSelection> extraSelections;
 
     if (!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
-
         selection.format.setBackground(*highlightColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);
         selection.cursor = textCursor();
@@ -223,4 +285,10 @@ void MyTextEdit::highlightCurrentLine() {
     }
 
     setExtraSelections(extraSelections);
+}
+
+void MyTextEdit::buttonPressEvent(QMouseEvent *event) {
+    int lineNumber = ceil(event->localPos().y()/fontMetrics().height()) +  firstVisibleBlock().blockNumber();
+    cerr << "Clicked line number: " << lineNumber << endl;
+    m_parent->SideButtonClick(lineNumber);
 }

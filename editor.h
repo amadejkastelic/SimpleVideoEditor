@@ -16,7 +16,6 @@
 #include <QSlider>
 #include <iostream>
 #include <fstream>
-#include "widgets/text_edit.h"
 #include "parser.h"
 #include "renderer.h"
 #include "widgets/video.h"
@@ -32,6 +31,8 @@
 #include <QErrorMessage>
 #include <QtConcurrent/QtConcurrent>
 
+class MyTextEdit;
+
 class Editor : public QWidget {
 
 Q_OBJECT
@@ -42,6 +43,7 @@ public:
     void updateSlider();
     void syncSlider();
     QMenuBar* buildMenuBar(QWidget *parent = nullptr) const;
+    void SideButtonClick(int lineNumber);
 
 public Q_SLOTS:
     void seek(int seconds);
@@ -50,7 +52,6 @@ private slots:
     void Preview();
     void Save();
     void OpenSettings();
-    void PreviewOnCursor();
     void ColorSelected();
     void FontSelected();
     void FileSelected();

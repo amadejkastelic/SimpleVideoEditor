@@ -1,5 +1,6 @@
 #include <QtPlayer.h>
 #include "editor.h"
+#include "widgets/text_edit.h"
 
 using namespace std;
 
@@ -101,7 +102,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     //connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
     connect(slider, &QSlider::sliderMoved, this, &Editor::seek);
     connect(slider, &QSlider::sliderPressed, this, &Editor::syncSlider);
-    connect(input, &MyTextEdit::cursorPositionChanged, this, &Editor::PreviewOnCursor);
+    //connect(input, &MyTextEdit::cursorPositionChanged, this, &Editor::PreviewOnCursor);
 }
 
 void Editor::seek(int seconds) {
@@ -278,14 +279,18 @@ void Editor::closeEvent(QCloseEvent *event) {
     QCoreApplication::quit();
 }
 
-void Editor::PreviewOnCursor() {
+void Editor::SideButtonClick(int lineNumber) {
     InitVideoPreviewWidget();
-    QTextCursor cursor = input->textCursor();
-    cerr << "Cursor position changed... Old: " << cursorLine << " New: " << cursor.blockNumber() << endl;
+
+    // move cursor to line
+    QTextCursor cursor(input->document()->findBlockByLineNumber(lineNumber - 1));
+    input->setTextCursor(cursor);
+
     QString line = cursor.block().text().trimmed();
     if (line.contains("path:")) {
         input->setCompleter(nullptr);
-        if (filePicker != nullptr && filePicker->isVisible()) {
+
+        /*if (filePicker != nullptr && filePicker->isVisible()) {
             return;
         }
 
@@ -293,14 +298,14 @@ void Editor::PreviewOnCursor() {
         if ((line.split(":").size() > 1 && line.split(":")[1].isEmpty())
                 || cursorLine != cursor.blockNumber()) {
             filePicker->open();
-        }
+        }*/
         /*if (input->completer() != path_completer) {
             input->setCompleter(path_completer);
         }
 
         if (cursorLine == cursor.blockNumber() && reader != nullptr && reader->IsOpen()) {
             return;
-        }
+        }*/
 
         string path = line.split(":")[1].trimmed().toStdString();
         cerr << "Path: " << path << endl;
@@ -337,7 +342,7 @@ void Editor::PreviewOnCursor() {
 
         slider->setRange(0, (int) reader->info.duration);
         slider->setEnabled(true);
-        slider->setSliderPosition(0);*/
+        slider->setSliderPosition(0);
     } else if (line.contains("font:")) {
         /*if (input->completer() != font_completer) {
             input->setCompleter(font_completer);
