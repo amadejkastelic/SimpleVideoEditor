@@ -352,9 +352,7 @@ void Editor::SideButtonClick(int lineNumber) {
             return;
         }
 
-        if (cursorLine != cursor.blockNumber()) {
-            fontPicker->open();
-        }
+        fontPicker->open();
     } else if (line.contains("color:")) {
         input->setCompleter(nullptr);
         if (colorPicker != nullptr && colorPicker->isVisible()) {
