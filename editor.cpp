@@ -109,6 +109,58 @@ void Editor::seek(int seconds) {
     player->Seek(seconds * settings.value("video/fps", 24).toInt());
 }
 
+void Editor::PreviewFile(string *path) {
+    InitVideoPreviewWidget();
+    if (reader != nullptr && reader->IsOpen()) {
+        timer->stop();
+        player->Stop();
+        reader->Close();
+    }
+
+    if (timeline->IsOpen()) {
+        timeline->Close();
+        player->Stop();
+        timer->stop();
+
+        timeline = new Timeline(
+                settings.value("video/width", 1920).toInt(),
+                settings.value("video/height", 1080).toInt(),
+                Fraction(settings.value("video/fps", 24).toInt(), 1),
+                settings.value("audio/sample_rate", 44100).toInt(),
+                2,
+                ChannelLayout::LAYOUT_STEREO);
+        timeline->SetCache(new CacheMemory(
+                settings.value("timeline/cache_size", 0).toInt()));
+    }
+
+    timeline->AddClip(new Clip(*path));
+
+    previewButton->setEnabled(false);
+
+    cerr << "Number of clips in timeline: " << timeline->Clips().size() << endl;
+    cerr << "Timeline length (frames): " << timeline->info.video_length << endl;
+    cerr << "Timeline length (s): " << timeline->info.duration << endl;
+    timeline->Open();
+
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &Editor::updateSlider);
+
+    video->SetTimer(timer);
+
+    player->Reader(timeline);
+    player->Loading();
+    player->Play();
+    timer->start(1000);
+
+    //playPauseButton->setEnabled(true);
+
+    slider->setRange(0, timeline->Clips().front()->Duration());
+    slider->setEnabled(true);
+    slider->setSliderPosition(0);
+
+    previewButton->setEnabled(true);
+}
+
 void Editor::Preview() {
     if (input->toPlainText().length() == 0) {
         return;
@@ -134,7 +186,8 @@ void Editor::Preview() {
                 settings.value("audio/sample_rate", 44100).toInt(),
                 2,
                 ChannelLayout::LAYOUT_STEREO);
-        timeline->SetCache(new CacheMemory(settings.value("timeline/cache_size", 0).toInt()));
+        timeline->SetCache(new CacheMemory(
+                settings.value("timeline/cache_size", 0).toInt()));
     }
 
     vector<spv::File*> files;
@@ -314,35 +367,11 @@ void Editor::SideButtonClick(int lineNumber) {
             return;
         }
 
-        if (reader != nullptr && reader->IsOpen()) {
-            player->Stop();
-            player->Loading();
-            timer->stop();
-            reader->Close();
-        }
-
         try {
-            reader = new FFmpegReader(path);
-            reader->Open();
+            this->PreviewFile(&path);
         } catch (...) {
             return;
         }
-
-        timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, &Editor::updateSlider);
-
-        video->SetTimer(timer);
-
-        player->Reader(reader);
-        player->Loading();
-        player->Play();
-        timer->start(1000);
-
-        //playPauseButton->setEnabled(true);
-
-        slider->setRange(0, (int) reader->info.duration);
-        slider->setEnabled(true);
-        slider->setSliderPosition(0);
     } else if (line.contains("font:")) {
         /*if (input->completer() != font_completer) {
             input->setCompleter(font_completer);

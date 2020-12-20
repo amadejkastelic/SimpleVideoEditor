@@ -50,6 +50,7 @@ public Q_SLOTS:
 
 private slots:
     void Preview();
+    void PreviewFile(string *path);
     void Save();
     void OpenSettings();
     void ColorSelected();
