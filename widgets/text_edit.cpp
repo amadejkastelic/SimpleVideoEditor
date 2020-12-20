@@ -171,11 +171,11 @@ int MyTextEdit::lineNumberAreaWidth() {
 }
 
 void MyTextEdit::updateLineNumberAreaWidth(int) {
-    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+    setViewportMargins(lineNumberAreaWidth() * 2, 0, 0, 0);
 }
 
 void MyTextEdit::updateButtonAreaWidth(int) {
-    setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
+    setViewportMargins(lineNumberAreaWidth() * 2, 0, 0, 0);
 }
 
 void MyTextEdit::updateLineNumberArea(const QRect &rect, int dy) {
