@@ -23,31 +23,32 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     renderButton = new QPushButton("Save", this);
     input = new MyTextEdit(this);
 
-    QStringList variables = { "variables", "part", "path", "start", "end", "type", "audio", "path", "text", "value",
-                              "position", "size", "font", "color", "scale", "animation", "length"};
-    variableCompleter = new QCompleter(variables, input);
+    variableCompleter = new QCompleter(Lists::variables(), input);
     variableCompleter->setWidget(input);
     variableCompleter->setCompletionMode(QCompleter::PopupCompletion);
-    variableCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    variableCompleter->setCaseSensitivity(Qt::CaseSensitive);
     connect(variableCompleter, QOverload<const QString &>::of(&QCompleter::activated), input,
             &MyTextEdit::insertCompletion);
 
-    path_completer = new QCompleter(input);
-    path_completer->setWidget(input);
-    auto *model = new QFileSystemModel(path_completer);
-    model->setRootPath(QDir::rootPath());
-    path_completer->setModel(model);
-    path_completer->setCompletionMode(QCompleter::PopupCompletion);
-    path_completer->setCaseSensitivity(Qt::CaseSensitive);
-    connect(path_completer, QOverload<const QString &>::of(&QCompleter::activated), input,
+    typeCompleter = new QCompleter(Lists::type(), input);
+    typeCompleter->setWidget(input);
+    typeCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    typeCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    connect(typeCompleter, QOverload<const QString &>::of(&QCompleter::activated), input,
             &MyTextEdit::insertCompletion);
 
-    QFontDatabase fonts;
-    font_completer = new QCompleter(fonts.families(), input);
-    font_completer->setWidget(input);
-    font_completer->setCompletionMode(QCompleter::PopupCompletion);
-    font_completer->setCaseSensitivity(Qt::CaseInsensitive);
-    connect(font_completer, QOverload<const QString &>::of(&QCompleter::activated), input,
+    scaleCompleter = new QCompleter(Lists::scale(), input);
+    scaleCompleter->setWidget(input);
+    scaleCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    scaleCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    connect(scaleCompleter, QOverload<const QString &>::of(&QCompleter::activated), input,
+            &MyTextEdit::insertCompletion);
+
+    positionCompleter = new QCompleter(Lists::position(), input);
+    positionCompleter->setWidget(input);
+    positionCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    positionCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    connect(positionCompleter, QOverload<const QString &>::of(&QCompleter::activated), input,
             &MyTextEdit::insertCompletion);
 
     renderButton->setEnabled(false);
@@ -348,6 +349,18 @@ void Editor::OnCursor() {
     if (!line.contains(":")) {
         if (input->completer() != variableCompleter) {
             input->setCompleter(variableCompleter);
+        }
+    } else if (line.contains("position:")) {
+        if (input->completer() != positionCompleter) {
+            input->setCompleter(positionCompleter);
+        }
+    } else if (line.contains("type:")) {
+        if (input->completer() != typeCompleter) {
+            input->setCompleter(typeCompleter);
+        }
+    } else if (line.contains("scale:")) {
+        if (input->completer() != scaleCompleter) {
+            input->setCompleter(scaleCompleter);
         }
     }
 

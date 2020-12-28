@@ -22,7 +22,7 @@ find_package(Qt5 REQUIRED COMPONENTS
 find_package(ImageMagick REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
-add_executable(svpeditor main.cpp editor.h editor.cpp data/file.cpp data/file.h data/video_file.cpp data/video_file.h data/image_file.cpp data/image_file.h parser.cpp parser.h renderer.cpp renderer.h data/files.h data/audio_file.cpp data/audio_file.h widgets/text_edit.cpp widgets/text_edit.h widgets/video.cpp widgets/video.h data/text.cpp data/text.h widgets/settings.cpp widgets/settings.h widgets/video_render_widget.cpp widgets/video_render_widget.h widgets/video_renderer.h widgets/video_renderer.cpp widgets/highlighter.cpp widgets/highlighter.h)
+add_executable(svpeditor main.cpp editor.h editor.cpp data/file.cpp data/file.h data/video_file.cpp data/video_file.h data/image_file.cpp data/image_file.h parser.cpp parser.h renderer.cpp renderer.h data/files.h data/audio_file.cpp data/audio_file.h widgets/text_edit.cpp widgets/text_edit.h widgets/video.cpp widgets/video.h data/text.cpp data/text.h widgets/settings.cpp widgets/settings.h widgets/video_render_widget.cpp widgets/video_render_widget.h widgets/video_renderer.h widgets/video_renderer.cpp widgets/highlighter.cpp widgets/highlighter.h utils/lists.h)
 
 target_compile_features(svpeditor PUBLIC cxx_std_14)
 set_target_properties(svpeditor PROPERTIES AUTORCC TRUE)

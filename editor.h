@@ -30,6 +30,7 @@
 #include "widgets/highlighter.h"
 #include <QErrorMessage>
 #include <QtConcurrent/QtConcurrent>
+#include "utils/lists.h"
 
 class MyTextEdit;
 
@@ -76,9 +77,10 @@ private:
     QSettings settings;
     int cursorLine;
     FFmpegReader *reader;
-    QCompleter *font_completer;
-    QCompleter *path_completer;
     QCompleter *variableCompleter;
+    QCompleter *scaleCompleter;
+    QCompleter *positionCompleter;
+    QCompleter *typeCompleter;
     QColorDialog *colorPicker;
     QFontDialog *fontPicker;
     QFileDialog *filePicker;
