@@ -7,8 +7,8 @@ class Lists {
 
 public:
     static QStringList variables() {
-        return {"variables", "part", "path", "start", "end", "type", "audio", "path", "text", "value", "position",
-                "size", "font", "color", "scale", "animation", "length"};
+        return {"variables", "part", "path", "start", "end", "type", "audio", "text", "value", "position", "size",
+                "font", "color", "scale", "animation", "length"};
     }
 
     static QStringList position() {

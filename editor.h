@@ -81,6 +81,7 @@ private:
     QCompleter *scaleCompleter;
     QCompleter *positionCompleter;
     QCompleter *typeCompleter;
+    QCompleter *pathCompleter;
     QColorDialog *colorPicker;
     QFontDialog *fontPicker;
     QFileDialog *filePicker;
