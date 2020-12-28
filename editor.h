@@ -57,6 +57,7 @@ private slots:
     void FontSelected();
     void FileSelected();
     void InitVideoPreviewWidget();
+    void OnCursor();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -77,6 +78,7 @@ private:
     FFmpegReader *reader;
     QCompleter *font_completer;
     QCompleter *path_completer;
+    QCompleter *variableCompleter;
     QColorDialog *colorPicker;
     QFontDialog *fontPicker;
     QFileDialog *filePicker;

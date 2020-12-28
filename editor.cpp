@@ -23,6 +23,15 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     renderButton = new QPushButton("Save", this);
     input = new MyTextEdit(this);
 
+    QStringList variables = { "variables", "part", "path", "start", "end", "type", "audio", "path", "text", "value",
+                              "position", "size", "font", "color", "scale", "animation", "length"};
+    variableCompleter = new QCompleter(variables, input);
+    variableCompleter->setWidget(input);
+    variableCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    variableCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    connect(variableCompleter, QOverload<const QString &>::of(&QCompleter::activated), input,
+            &MyTextEdit::insertCompletion);
+
     path_completer = new QCompleter(input);
     path_completer->setWidget(input);
     auto *model = new QFileSystemModel(path_completer);
@@ -102,7 +111,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     //connect(playPauseButton, &QPushButton::clicked, this, &Editor::playPause);
     connect(slider, &QSlider::sliderMoved, this, &Editor::seek);
     connect(slider, &QSlider::sliderPressed, this, &Editor::syncSlider);
-    //connect(input, &MyTextEdit::cursorPositionChanged, this, &Editor::PreviewOnCursor);
+    connect(input, &MyTextEdit::cursorPositionChanged, this, &Editor::OnCursor);
 }
 
 void Editor::seek(int seconds) {
@@ -332,6 +341,19 @@ void Editor::closeEvent(QCloseEvent *event) {
     QCoreApplication::quit();
 }
 
+void Editor::OnCursor() {
+    QTextCursor cursor = input->textCursor();
+    QString line = cursor.block().text().trimmed();
+
+    if (!line.contains(":")) {
+        if (input->completer() != variableCompleter) {
+            input->setCompleter(variableCompleter);
+        }
+    }
+
+    cursorLine = cursor.blockNumber();
+}
+
 void Editor::SideButtonClick(int lineNumber) {
     InitVideoPreviewWidget();
 
@@ -341,7 +363,7 @@ void Editor::SideButtonClick(int lineNumber) {
 
     QString line = cursor.block().text().trimmed();
     if (line.contains("path:")) {
-        input->setCompleter(nullptr);
+        //input->setCompleter(nullptr);
 
         /*if (filePicker != nullptr && filePicker->isVisible()) {
             return;
