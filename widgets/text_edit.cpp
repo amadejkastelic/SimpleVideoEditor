@@ -66,7 +66,7 @@ MyTextEdit::MyTextEdit(Editor *editor) : QPlainTextEdit(editor) {
     setFont();
 
     QPalette palette = this->palette();
-    palette.setColor(QPalette::Active, QPalette::Base, *backgroundColor);
+    palette.setColor(QPalette::All, QPalette::Base, *backgroundColor);
     this->setPalette(palette);
     this->setBackgroundVisible(false);
 
