@@ -134,9 +134,9 @@ QString MyTextEdit::textUnderCursor() const {
 }
 
 void MyTextEdit::focusInEvent(QFocusEvent *event) {
-    if (m_completer) {
+    /*if (m_completer) {
         m_completer->setWidget(this);
-    }
+    }*/
     QPlainTextEdit::focusInEvent(event);
 }
 

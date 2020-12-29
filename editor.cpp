@@ -362,13 +362,12 @@ void Editor::OnCursor() {
         if (input->completer() != scaleCompleter) {
             input->setCompleter(scaleCompleter);
         }
-    } else if (line.contains("path:")) {
+    /*} else if (line.contains("path:")) {
         if (input->completer() != pathCompleter) {
             input->setCompleter(pathCompleter);
-        }
+        }*/
     } else {
         if (input->completer() != nullptr) {
-            input->completer()->popup()->hide();
             input->setCompleter(nullptr);
         }
     }
