@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QProcess>
 #include <QMessageBox>
+#include <QStandardItem>
 #include <iostream>
 
 using namespace std;
@@ -36,6 +37,7 @@ private:
     QLineEdit *videoFpsInput;
     QLineEdit *videoBitrateInput;
     QComboBox *videoCodecSelect;
+    QComboBox *videoHardwareSelect;
     QLineEdit *audioSampleRateInput;
     QComboBox *audioCodecSelect;
     QComboBox *previewPositionSelect;

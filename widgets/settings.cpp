@@ -48,6 +48,47 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     videoCodecBox->addWidget(videoCodecLabel);
     videoCodecBox->addWidget(videoCodecSelect);
 
+    auto *videoHardwareBox = new QHBoxLayout();
+    auto *videoHardwareLabel = new QLabel("Hardware Acceleration:");
+    videoHardwareSelect = new QComboBox();
+    auto *model = new QStandardItemModel(this);
+    auto *hwNone = new QStandardItem();
+    hwNone->setData(tr("Disabled"), Qt::DisplayRole);
+    hwNone->setData(0, Qt::UserRole);
+    model->setItem(0, hwNone);
+    auto *hwVaAPI = new QStandardItem();
+    hwVaAPI->setData(tr("Linux VA-API"), Qt::DisplayRole);
+    hwVaAPI->setData(1, Qt::UserRole);
+    model->setItem(1, hwVaAPI);
+    auto *hwNVDEC = new QStandardItem();
+    hwNVDEC->setData(tr("nVidia NVDEC"), Qt::DisplayRole);
+    hwNVDEC->setData(2, Qt::UserRole);
+    model->setItem(2, hwNVDEC);
+    auto *hwD9 = new QStandardItem();
+    hwD9->setData(tr("Windows D3D9"), Qt::DisplayRole);
+    hwD9->setData(3, Qt::UserRole);
+    model->setItem(3, hwD9);
+    auto *hwD11 = new QStandardItem();
+    hwD11->setData(tr("Windows D3D11"), Qt::DisplayRole);
+    hwD11->setData(4, Qt::UserRole);
+    model->setItem(4, hwD11);
+    auto *hwMac = new QStandardItem();
+    hwMac->setData(tr("MacOS VideoToolBox"), Qt::DisplayRole);
+    hwMac->setData(5, Qt::UserRole);
+    model->setItem(5, hwMac);
+    auto *hwVDPAU = new QStandardItem();
+    hwVDPAU->setData(tr("Linux VDPAU"), Qt::DisplayRole);
+    hwVDPAU->setData(6, Qt::UserRole);
+    model->setItem(6, hwVDPAU);
+    auto *hwQsv = new QStandardItem();
+    hwQsv->setData(tr("Intel QSV"), Qt::DisplayRole);
+    hwQsv->setData(7, Qt::UserRole);
+    model->setItem(7, hwQsv);
+    videoHardwareSelect->setModel(model);
+    videoHardwareSelect->setCurrentIndex(settings.value("video/hw_acceleration", 0).toInt());
+    videoHardwareBox->addWidget(videoHardwareLabel);
+    videoHardwareBox->addWidget(videoHardwareSelect);
+
     // AUDIO
 
     auto *audioSampleRateBox = new QHBoxLayout();
@@ -93,6 +134,7 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     layout->addLayout(videoFpsBox);
     layout->addLayout(videoBitrateBox);
     layout->addLayout(videoCodecBox);
+    layout->addLayout(videoHardwareBox);
 
     layout->addWidget(audioSection);
     layout->addLayout(audioSampleRateBox);
@@ -122,6 +164,11 @@ void SettingsEditor::Save() {
     }
     if (!videoCodecSelect->currentText().isEmpty()) {
         settings.setValue("video/codec", videoCodecSelect->currentText());
+    }
+    if (!videoHardwareSelect->currentText().isEmpty()) {
+        settings.setValue("video/hw_acceleration", videoHardwareSelect->currentData(Qt::UserRole));
+        settings.sync();
+        ShowRestartDialog();
     }
 
     if (!audioSampleRateInput->text().isEmpty()) {
