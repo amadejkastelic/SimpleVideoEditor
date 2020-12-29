@@ -165,7 +165,7 @@ void SettingsEditor::Save() {
     if (!videoCodecSelect->currentText().isEmpty()) {
         settings.setValue("video/codec", videoCodecSelect->currentText());
     }
-    if (!videoHardwareSelect->currentText().isEmpty()) {
+    if (videoHardwareSelect->currentData(Qt::UserRole) != settings.value("video/hw_acceleration", 0).toInt()) {
         settings.setValue("video/hw_acceleration", videoHardwareSelect->currentData(Qt::UserRole));
         settings.sync();
         ShowRestartDialog();
