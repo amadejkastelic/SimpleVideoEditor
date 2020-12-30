@@ -432,6 +432,10 @@ void Editor::SideButtonClick(int lineNumber) {
         }
 
         colorPicker->open();
+    } else if (line.contains("part:") || line.contains("variables:")) {
+        input->fold();
+    } else if (line.contains(QChar::ObjectReplacementCharacter)) {
+        input->unfold();
     } else {
         input->setCompleter(nullptr);
     }

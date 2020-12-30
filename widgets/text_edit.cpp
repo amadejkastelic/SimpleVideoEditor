@@ -57,6 +57,10 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
 MyTextEdit::MyTextEdit(Editor *editor) : QPlainTextEdit(editor) {
     m_parent = editor;
 
+    foldHandler = new FoldedText(this);
+    this->document()->documentLayout()->registerHandler(FoldedText::type(), foldHandler);
+    this->setLineWrapMode(NoWrap);
+
     backgroundColor = new QColor(33, 33, 33);
     selectionColor = new QColor(53, 53, 53);
     highlightColor = new QColor(18, 18, 18);
@@ -259,9 +263,12 @@ void MyTextEdit::buttonAreaPaintEvent(QPaintEvent *event) {
             } else if (block.text().contains("color:")) {
                 painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
                                  Qt::AlignCenter, "🎨");
-            } else if (block.text().contains("part:")) {
+            } else if (block.text().contains("part:") || block.text().contains("variables:")) {
                 painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
                                  Qt::AlignCenter, "-");
+            } else if (block.text().contains(QChar::ObjectReplacementCharacter)) {
+                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                                 Qt::AlignCenter, "+");
             }
         }
 
@@ -291,4 +298,12 @@ void MyTextEdit::buttonPressEvent(QMouseEvent *event) {
     int lineNumber = ceil(event->localPos().y()/fontMetrics().height()) +  firstVisibleBlock().blockNumber();
     cerr << "Clicked line number: " << lineNumber << endl;
     m_parent->SideButtonClick(lineNumber);
+}
+
+void MyTextEdit::fold() {
+    foldHandler->fold(this->textCursor());
+}
+
+void MyTextEdit::unfold() {
+    foldHandler->unfold(this->textCursor());
 }

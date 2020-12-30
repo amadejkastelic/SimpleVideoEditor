@@ -16,6 +16,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QPushButton>
+#include "../utils/fold_text.h"
 
 using namespace std;
 
@@ -29,6 +30,7 @@ class MyTextEdit : public QPlainTextEdit {
 
 private:
     Editor *m_parent;
+    FoldedText* foldHandler;
     QColor *backgroundColor;
     QColor *highlightColor;
     QColor *selectionColor;
@@ -58,6 +60,8 @@ public:
 
 public slots:
     void insertCompletion(const QString &completion);
+    void fold();
+    void unfold();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
