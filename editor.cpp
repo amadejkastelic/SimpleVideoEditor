@@ -433,10 +433,12 @@ void Editor::SideButtonClick(int lineNumber) {
         }
 
         colorPicker->open();
-    } else if (line.contains("part:") || line.contains("variables:")) {
-        input->fold();
     } else if (line.contains(QChar::ObjectReplacementCharacter)) {
+        cerr << "Unfolding..." << endl;
         input->unfold();
+    } else if (line.contains("part:") || line.contains("variables:")) {
+        cerr << "Folding..." << endl;
+        input->fold();
     } else {
         input->setCompleter(nullptr);
     }

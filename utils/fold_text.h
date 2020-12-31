@@ -1,10 +1,14 @@
 #pragma once
 
+#include <iostream>
 #include <QObject>
 #include <QPainter>
 #include <QTextDocument>
+#include <QTextBlock>
 #include <QTextObjectInterface>
 #include <QTextDocumentFragment>
+
+using namespace std;
 
 class FoldedText : public QObject, public QTextObjectInterface {
 
@@ -12,7 +16,7 @@ class FoldedText : public QObject, public QTextObjectInterface {
     Q_INTERFACES(QTextObjectInterface)
 
 private:
-    const QString *foldedText = new QString("...");
+    const QString *foldedText = new QString(" ... ");
 
 public:
     explicit FoldedText(QObject *parent = nullptr);

@@ -286,12 +286,12 @@ void MyTextEdit::buttonAreaPaintEvent(QPaintEvent *event) {
             } else if (block.text().contains("color:")) {
                 painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
                                  Qt::AlignCenter, "🎨");
-            } else if (block.text().contains("part:") || block.text().contains("variables:")) {
-                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
-                                 Qt::AlignCenter, "-");
             } else if (block.text().contains(QChar::ObjectReplacementCharacter)) {
                 painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
                                  Qt::AlignCenter, "+");
+            } else if (block.text().contains("part:") || block.text().contains("variables:")) {
+                painter.drawText(0, top, buttonArea->width(), fontMetrics().height(),
+                                 Qt::AlignCenter, "-");
             }
         }
 

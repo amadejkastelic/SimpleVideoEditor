@@ -12,7 +12,8 @@ QSizeF FoldedText::intrinsicSize(QTextDocument *doc, int pos, const QTextFormat 
     auto font = charFormat.font();
     QFontMetrics fontMetrics(font);
 
-    QSizeF size = fontMetrics.boundingRect(*foldedText).size();
+    QSizeF size = QSizeF(fontMetrics.boundingRect(*foldedText).width()*1.05,
+                         fontMetrics.boundingRect(*foldedText).height()*0.6);
 
     return size;
 }
@@ -32,14 +33,27 @@ void FoldedText::fold(QTextCursor cursor) {
     QTextCharFormat textFormat;
     textFormat.setObjectType(type());
 
-    /*cursor.setPosition(cursor.Down, QTextCursor::MoveAnchor);
-    cursor.setPosition(cursor.EndOfLine, QTextCursor::KeepAnchor);
-    cursor.setPosition(cursor.Down, QTextCursor::MoveAnchor);
-    cursor.setPosition(cursor.EndOfLine, QTextCursor::KeepAnchor);*/
-    cursor.select(QTextCursor::Document);
+    QString command;
+    if (cursor.block().text().startsWith("- variables:")) {
+        command = "- part:";
+    } else {
+        command = cursor.block().text();
+    }
+
+    cursor.clearSelection();
+    cursor.movePosition(QTextCursor::EndOfLine);
+
+    int i = cursor.blockNumber()+1;
+    while (!cursor.document()->findBlockByLineNumber(i).text().startsWith(command) && i < cursor.document()->lineCount()) {
+        cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        i++;
+    }
 
     QVariant variant;
     variant.setValue(cursor.selection());
+
+    cerr << variant.value<QTextDocumentFragment>().toPlainText().toStdString() << endl;
 
     textFormat.setProperty(prop(), variant);
     cursor.insertText(QString(QChar::ObjectReplacementCharacter), textFormat);
@@ -50,16 +64,24 @@ bool FoldedText::unfold(QTextCursor cursor) {
         return false;
     }
 
-    QTextCharFormat textFormat = cursor.charFormat();
-    if (textFormat.objectType() == type()) {
+    cursor.movePosition(cursor.EndOfLine, cursor.MoveAnchor);
+    while (cursor.selectedText() != QChar::ObjectReplacementCharacter) {
+        cursor.clearSelection();
         cursor.movePosition(cursor.Left, cursor.KeepAnchor);
-        QVariant variant = textFormat.property(prop());
-        auto fragment = variant.value<QTextDocumentFragment>();
-        cursor.select(QTextCursor::LineUnderCursor);
-        cursor.removeSelectedText();
-        cursor.insertFragment(fragment);
-        return true;
     }
+    cursor.clearSelection();
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+    QString temp = cursor.selectedText();
+    cursor.removeSelectedText();
+    cursor.clearSelection();
 
-    return false;
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(cursor.Left, cursor.KeepAnchor);
+    QVariant variant = cursor.charFormat().property(prop());
+    auto fragment = variant.value<QTextDocumentFragment>();
+    cursor.select(QTextCursor::LineUnderCursor);
+    cursor.removeSelectedText();
+    cursor.insertText(temp);
+    cursor.insertFragment(fragment);
+    return true;
 }
