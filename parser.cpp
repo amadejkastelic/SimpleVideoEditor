@@ -9,7 +9,22 @@ int Parser::parseInt(string value, YAML::Node variables) {
 }
 
 string Parser::parseString(string value, YAML::Node variables) {
-    if (value[0] == '$' && variables[value.substr(1)].IsDefined()) {
+    QString text = QString::fromStdString(value);
+
+    if (text.contains("+")) {
+        string result;
+        QStringList list = text.split("+");
+        for (int i = 0; i < list.length(); i++) {
+            QString curr = list[i].trimmed();
+            if (curr[0] == '$' && variables[curr.toStdString().substr(1)].IsDefined()) {
+                result.append(variables[curr.toStdString().substr(1)].as<string>());
+            } else {
+                result.append(curr.toStdString());
+            }
+        }
+
+        return result;
+    } else if (value[0] == '$' && variables[value.substr(1)].IsDefined()) {
         return variables[value.substr(1)].as<string>();
     }
 
@@ -88,4 +103,19 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
     }
 
     return result;
+}
+
+string Parser::getString(string value, string yaml) {
+    YAML::Node variables;
+    YAML::Node instructions = YAML::Load(yaml);
+
+    if (instructions.IsSequence()) {
+        for (auto &&instruction : instructions) {
+            if (instruction.IsMap() && instruction["variables"].IsDefined()) {
+                variables = instruction["variables"];
+            }
+        }
+    }
+
+    return Parser::parseString(value, variables);
 }

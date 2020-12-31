@@ -403,7 +403,8 @@ void Editor::SideButtonClick(int lineNumber) {
             return;
         }*/
 
-        string path = line.split(":")[1].trimmed().toStdString();
+        string path = Parser::getString(line.split(":")[1].trimmed().toStdString(),
+                                        input->toPlainText().toStdString());
         cerr << "Path: " << path << endl;
         if (!fopen(path.c_str(), "r")) {
             cerr << "File doesn't exist." << endl;
