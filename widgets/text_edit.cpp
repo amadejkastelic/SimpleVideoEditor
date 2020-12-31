@@ -21,6 +21,29 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
     if (!m_completer || !isShortcut) {
         if (event->key() == Qt::Key_Tab) {
             QPlainTextEdit::insertPlainText("    ");
+        } else if (event->key() == Qt::Key_Return) {
+            QString temp = this->textCursor().block().text().split(":")[0];
+            uint spaces = temp.length() - temp.trimmed().length();
+            if (temp.contains("part") || temp.contains("audio") || temp.contains("text")) {
+                spaces += 4;
+            }
+            QPlainTextEdit::insertPlainText("\n");
+            for (int i = 0; i < spaces; i++) {
+                QPlainTextEdit::insertPlainText(" ");
+            }
+        } else if (event->key() == Qt::Key_Backspace) {
+            QString line = this->textCursor().block().text();
+            if (line.length() > 0 && line.trimmed().isEmpty()) {
+                int toDelete = 4;
+                if (line.length() < 4) {
+                    toDelete = line.length();
+                }
+                for (int i = 0; i < toDelete; i++) {
+                    this->textCursor().deletePreviousChar();
+                }
+            } else {
+                QPlainTextEdit::keyPressEvent(event);
+            }
         } else {
             QPlainTextEdit::keyPressEvent(event);
         }
