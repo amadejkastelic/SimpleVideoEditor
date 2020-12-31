@@ -55,7 +55,7 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                     }
                 }
 
-                if (type == "VIDEO") {
+                if (boost::iequals(type, "video")) {
                     uint start = parseInt(instruction["part"]["start"].as<string>(), variables);
                     uint end = parseInt(instruction["part"]["end"].as<string>(), variables);
                     AudioFile *audio = nullptr;
@@ -67,7 +67,7 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                         audio = new AudioFile(audioPath, audioStart, audioStart + end - start);
                     }
                     result.push_back(new VideoFile(path, start, end, audio, text, scale));
-                } else if (type == "IMAGE") {
+                } else if (boost::iequals(type, "image")) {
                     uint length = parseInt(instruction["part"]["length"].as<string>(), variables);
                     string animation = parseString(instruction["part"]["animation"]
                             .as<string>("none"), variables);
