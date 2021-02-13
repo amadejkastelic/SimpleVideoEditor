@@ -14,7 +14,6 @@
 
 ## Usage
 The program uses a simple yml syntax.
-- [Example](https://github.com/amadejkastelic/SimpleVideoEditor/blob/master/test.yml)
 
 ### Variables
 Declare your own custom variables, which you can use later by prefixing it's key with `$`.
@@ -47,4 +46,49 @@ Each part is a part of the timeline. It must contain some parameters:
         - size: font size in px (mandatory)
         - font: font family (optional)
         - color: hex color (mandatory)
+    
+### Example
+```yml
+- variables:
+    test: test
+    font_position: center
+    font_size: 200
+    default_path: /home/amadejk/temp/sveditor/
+- part:
+    path: $default_path + sample_fhd.mp4
+    start: 11
+    end: 15
+    type: VIDEO
+    audio:
+      path: $default_path + sample.mp3
+      start: 11
+    text:
+      - part:
+          value: video test center
+          position: $font_position
+          size: $font_size
+          font: Fira Code
+          color: FF85FFA3
+      - part:
+          value: video test bottom
+          position: BOTTOM
+          size: 50
+          font: Fira Code
+          color: FF00AAFF
+- part:
+    path: $default_path + sample_fhd.jpg
+    length: 5
+    type: IMAGE
+    scale: FIT
+    audio:
+      path: $default_path + sample.mp3
+      start: 21
+    text:
+      - part:
+          value: photo test bottom left
+          position: bottom_left
+          size: 50
+          font: Fira Code
+          color: FFFF00FF
+```
     
