@@ -71,8 +71,14 @@ vector<spv::File*> Parser::ParseYaml(string yaml) {
                 }
 
                 if (boost::iequals(type, "video")) {
-                    uint start = parseInt(instruction["part"]["start"].as<string>(), variables);
-                    uint end = parseInt(instruction["part"]["end"].as<string>(), variables);
+                    uint start = 0;
+                    uint end = 0;
+                    if (instruction["part"]["start"].IsDefined()) {
+                        start = parseInt(instruction["part"]["start"].as<string>(), variables);
+                    }
+                    if (instruction["part"]["end"].IsDefined()) {
+                        end = parseInt(instruction["part"]["end"].as<string>(), variables);
+                    }
                     AudioFile *audio = nullptr;
                     if (instruction["part"]["audio"].IsMap()) {
                         string audioPath = parseString(instruction["part"]["audio"]["path"]

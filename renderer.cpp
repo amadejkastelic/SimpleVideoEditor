@@ -7,8 +7,14 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
         if (auto* videoFile = dynamic_cast<VideoFile*>(file)) {
             Clip *clip = new Clip(new FFmpegReader(videoFile->GetPath()));
             clip->Position((float) length);
-            clip->Start((float) videoFile->GetStart());
-            clip->End((float) videoFile->GetEnd());
+            if (videoFile->GetStart() < videoFile->GetEnd()) {
+                clip->Start((float) videoFile->GetStart());
+                clip->End((float) videoFile->GetEnd());
+            } else {
+                cerr << "Start: " << videoFile->GetStart() << " End: " << floor(clip->Reader()->info.duration) << endl;
+                clip->Start((float) videoFile->GetStart());
+                clip->End(floor(clip->Reader()->info.duration)-1);
+            }
             clip->gravity = GRAVITY_CENTER;
             clip->scale = videoFile->GetScale();
             clip->Layer(layer++);
@@ -17,8 +23,13 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
             if (videoFile->GetAudioFile() != nullptr) {
                 Clip *audio = new Clip(new FFmpegReader(videoFile->GetAudioFile()->GetPath()));
                 audio->Position((float) length);
-                audio->Start((float) videoFile->GetAudioFile()->GetStart());
-                audio->End((float) videoFile->GetAudioFile()->GetEnd());
+                if (videoFile->GetAudioFile()->GetStart() < videoFile->GetAudioFile()->GetEnd()) {
+                    audio->Start((float) videoFile->GetAudioFile()->GetStart());
+                    audio->End((float) videoFile->GetAudioFile()->GetEnd());
+                } else {
+                    audio->Start((float) videoFile->GetAudioFile()->GetStart());
+                    audio->End(audio->Reader()->info.duration);
+                }
                 audio->Layer(layer++);
                 clip->volume = 0;
                 timeline->AddClip(audio);
@@ -29,12 +40,12 @@ uint Renderer::render(const vector<spv::File *> &files, Timeline *timeline) {
                 Clip *textClip = new Clip(new QtTextReader(1920, 1080, 0, 0, text->GetPosition(), text->GetValue(), *font, "#" + text->GetColor(), "transparent"));
                 textClip->Position((float) length);
                 textClip->Start(0.0);
-                textClip->End((float) videoFile->GetEnd() - videoFile->GetStart());
+                textClip->End((float) clip->End() - clip->Start());
                 textClip->Layer(layer++);
                 timeline->AddClip(textClip);
             }
 
-            length += (videoFile->GetEnd() - videoFile->GetStart());
+            length += (clip->End() - clip->Start());
         } else if (auto* imageFile = dynamic_cast<ImageFile*>(file)) {
             if (boost::iequals(imageFile->GetAnimation(), "zoom")) {
                 for (size_t i=0; i<imageFile->GetLength()*100; i+=1) {
