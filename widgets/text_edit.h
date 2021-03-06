@@ -16,6 +16,7 @@
 #include <QPaintEvent>
 #include <QResizeEvent>
 #include <QPushButton>
+#include <QClipboard>
 #include "../utils/fold_text.h"
 
 using namespace std;
@@ -57,6 +58,7 @@ public:
     void buttonAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
     void buttonPressEvent(QMouseEvent *event);
+    void saveWorkspace();
 
 public slots:
     void insertCompletion(const QString &completion);

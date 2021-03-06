@@ -16,6 +16,34 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
         }
     }
 
+    if (event->modifiers().testFlag(Qt::ControlModifier)) {
+        QTextCursor cursor = this->textCursor();
+        switch (event->key()) {
+            case Qt::Key_S:
+                cerr << "Saving workspace..." << endl;
+                saveWorkspace();
+                return;
+            case Qt::Key_X:
+                if (cursor.selectedText().isEmpty()) {
+                    cursor.select(QTextCursor::LineUnderCursor);
+                    cerr << cursor.selection().toPlainText().toStdString() << endl;
+                    QClipboard *clipboard = QGuiApplication::clipboard();
+                    clipboard->setText("\n" + cursor.selectedText());
+                    cursor.removeSelectedText();
+                    cursor.deleteChar();
+                    return;
+                }
+                break;
+            case Qt::Key_D:
+                cursor.select(QTextCursor::LineUnderCursor);
+                QString text = cursor.selectedText();
+                cursor.clearSelection();
+                cursor.movePosition(QTextCursor::EndOfLine);
+                cursor.insertText("\n" + text);
+                return;
+        }
+    }
+
     const bool isShortcut = (event->modifiers().testFlag(Qt::ControlModifier) && event->key() == Qt::Key_Space);
 
     if (!m_completer || !isShortcut) {
@@ -171,7 +199,7 @@ void MyTextEdit::setCompleter(QCompleter *completer) {
     m_completer = completer;
 }
 
-void MyTextEdit::keyReleaseEvent(QKeyEvent *event) {
+void MyTextEdit::saveWorkspace() {
     // save workspace
     if (!m_workspace->isOpen()) {
         m_workspace->open(QIODevice::ReadWrite);
@@ -180,7 +208,10 @@ void MyTextEdit::keyReleaseEvent(QKeyEvent *event) {
     QTextStream stream(m_workspace);
     stream << MyTextEdit::toPlainText();
     stream.flush();
+}
 
+void MyTextEdit::keyReleaseEvent(QKeyEvent *event) {
+    saveWorkspace();
     QPlainTextEdit::keyReleaseEvent(event);
 }
 
