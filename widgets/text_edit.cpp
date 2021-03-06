@@ -28,7 +28,7 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
                     cursor.select(QTextCursor::LineUnderCursor);
                     cerr << cursor.selection().toPlainText().toStdString() << endl;
                     QClipboard *clipboard = QGuiApplication::clipboard();
-                    clipboard->setText("\n" + cursor.selectedText());
+                    clipboard->setText(cursor.selectedText() + "\n");
                     cursor.removeSelectedText();
                     cursor.deleteChar();
                     return;
