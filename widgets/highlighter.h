@@ -21,8 +21,9 @@ private:
     QVector<HighlightingRule> rules;
 
     QTextCharFormat keywordFormat;
-    QTextCharFormat seperatorFormat;
+    QTextCharFormat separatorFormat;
     QTextCharFormat startArrayFormat;
     QTextCharFormat valueFormat;
     QTextCharFormat variableFormat;
+    QTextCharFormat commentFormat;
 };

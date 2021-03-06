@@ -9,10 +9,10 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
     rule.format = keywordFormat;
     rules.append(rule);
 
-    seperatorFormat.setForeground(QBrush(QColor(137, 221, 255)));
-    seperatorFormat.setFontWeight(QFont::Bold);
+    separatorFormat.setForeground(QBrush(QColor(137, 221, 255)));
+    separatorFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegularExpression(QStringLiteral("[:]"));
-    rule.format = seperatorFormat;
+    rule.format = separatorFormat;
     rules.append(rule);
 
     valueFormat.setForeground(QBrush(QColor(238, 255, 255)));
@@ -30,6 +30,11 @@ Highlighter::Highlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
     variableFormat.setFontWeight(QFont::Bold);
     rule.pattern = QRegularExpression(QStringLiteral("[$][a-zA-Z-_]+"));
     rule.format = variableFormat;
+    rules.append(rule);
+
+    commentFormat.setForeground(QBrush(QColor(128, 128, 128)));
+    rule.pattern = QRegularExpression(QStringLiteral("#(.*)"));
+    rule.format = commentFormat;
     rules.append(rule);
 }
 
