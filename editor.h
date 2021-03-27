@@ -28,6 +28,7 @@
 #include <QMenu>
 #include "widgets/settings.h"
 #include "widgets/highlighter.h"
+#include "widgets/preview_widget.h"
 #include <QErrorMessage>
 #include <QtConcurrent/QtConcurrent>
 #include "utils/lists.h"
@@ -59,6 +60,7 @@ private slots:
     void FileSelected();
     void InitVideoPreviewWidget();
     void OnCursor();
+    void OpenPreviewWindow();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -87,4 +89,5 @@ private:
     QFileDialog *filePicker;
     QGridLayout *previewGrid;
     Highlighter *highlighter;
+    PreviewWidget *previewWidget;
 };

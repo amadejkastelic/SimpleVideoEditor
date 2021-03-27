@@ -113,7 +113,13 @@ SettingsEditor::SettingsEditor(QWidget *parent) : QWidget(parent) {
     if (settings.value("view/layout") == QString("Left")) {
         previewPositionSelect->addItem("Left", QVariant(QVariant::Type::String));
         previewPositionSelect->addItem("Right", QVariant(QVariant::Type::String));
+        previewPositionSelect->addItem("Detached", QVariant(QVariant::Type::String));
+    } else if (settings.value("view/layout") == QString("Right")) {
+        previewPositionSelect->addItem("Right", QVariant(QVariant::Type::String));
+        previewPositionSelect->addItem("Left", QVariant(QVariant::Type::String));
+        previewPositionSelect->addItem("Detached", QVariant(QVariant::Type::String));
     } else {
+        previewPositionSelect->addItem("Detached", QVariant(QVariant::Type::String));
         previewPositionSelect->addItem("Right", QVariant(QVariant::Type::String));
         previewPositionSelect->addItem("Left", QVariant(QVariant::Type::String));
     }

@@ -84,6 +84,10 @@ Editor::Editor(QWidget *parent) : QWidget(parent) {
     if (settings.value("view/layout", "Left") == QString("Left")) {
         layout->addLayout(previewGrid);
         layout->addLayout(inputGrid);
+    } else if (settings.value("view/layout", "Left") == QString("Detached")) {
+        layout->addLayout(inputGrid);
+        previewWidget = new PreviewWidget(this, previewGrid);
+        previewWidget->show();
     } else {
         layout->addLayout(inputGrid);
         layout->addLayout(previewGrid);
@@ -326,6 +330,14 @@ QMenuBar* Editor::buildMenuBar(QWidget *parent) const {
 
     menuBar->addMenu(fileMenu);
 
+    if (settings.value("view/layout", "Left") == QString("Detached")) {
+        auto *viewMenu = new QMenu("View");
+        auto *previewAction = new QAction("Show Preview");
+        connect(previewAction, &QAction::triggered, this, &Editor::OpenPreviewWindow);
+        viewMenu->addAction(previewAction);
+        menuBar->addMenu(viewMenu);
+    }
+
     return menuBar;
 }
 
@@ -497,4 +509,8 @@ void Editor::InitVideoPreviewWidget() {
     previewGrid->addWidget(video);
     //previewGrid->addWidget(playPauseButton);
     previewGrid->addWidget(slider);
+}
+
+void Editor::OpenPreviewWindow() {
+    previewWidget->show();
 }
