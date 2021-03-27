@@ -4,6 +4,7 @@
 ![screenshot](https://raw.githubusercontent.com/amadejkastelic/SimpleVideoEditor/develop/res/screenshot.png)
 
 ## Building
+### Native version
 - Build libopenshot-audio and libopenshot (https://github.com/OpenShot/libopenshot/wiki/Linux-Build-Instructions)
 - `sudo apt install imagemagick libyaml-cpp-dev libboost-dev`
 - `sudo ln -s /usr/include/jsoncpp/json/ /usr/include/json`
@@ -11,6 +12,12 @@
 - `cmake -B build -S .`
 - `cmake --build build`
 - `cd build && ./svpeditor`
+### AppImage (Ubuntu 16.04)
+- `mkdir build && cd build`
+- `cmake --build . --config Release`
+- `cmake .. -DCMAKE_INSTALL_PREFIX=/usr`
+- `make install DESTDIR=AppDir`
+- `./linuxdeployqt sveditor.desktop -appimage -bundle-non-qt-libs`
 
 ## Usage
 The program uses a simple yml syntax.
