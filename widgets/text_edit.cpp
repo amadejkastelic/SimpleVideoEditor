@@ -16,6 +16,30 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
         }
     }
 
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+        QTextCursor cursor = this->textCursor();
+        cursor.select(QTextCursor::LineUnderCursor);
+        QString line = cursor.selection().toPlainText().trimmed();
+        if (line == "part:video") {
+            cursor.removeSelectedText();
+            cursor.insertText(QString(section_video));
+            return;
+        } else if (line == "part:image") {
+            cursor.removeSelectedText();
+            cursor.insertText(QString(section_image));
+            return;
+        } else if (line == "part:text") {
+            cursor.removeSelectedText();
+            cursor.insertText(QString(section_text));
+            return;
+        } else if (line == "part:audio") {
+            cursor.removeSelectedText();
+            cursor.insertText(QString(section_audio));
+            return;
+        }
+        cursor.clearSelection();
+    }
+
     if (event->modifiers().testFlag(Qt::ControlModifier)) {
         QTextCursor cursor = this->textCursor();
         switch (event->key()) {

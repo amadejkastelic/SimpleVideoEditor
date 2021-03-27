@@ -18,6 +18,7 @@
 #include <QPushButton>
 #include <QClipboard>
 #include "../utils/fold_text.h"
+#include "../utils/sections.h"
 
 using namespace std;
 
