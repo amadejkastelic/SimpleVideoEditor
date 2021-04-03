@@ -16,7 +16,7 @@ public:
     }
 
     static QStringList type() {
-        return {"image", "video"};
+        return {"image", "video", "text"};
     }
 
     static QStringList scale() {

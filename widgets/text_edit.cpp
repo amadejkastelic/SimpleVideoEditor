@@ -22,20 +22,23 @@ void MyTextEdit::keyPressEvent(QKeyEvent *event) {
         QString line = cursor.selection().toPlainText().trimmed();
         if (line == "part:video") {
             cursor.removeSelectedText();
-            cursor.insertText(QString(section_video));
+            cursor.insertText(section_video);
             return;
         } else if (line == "part:image") {
             cursor.removeSelectedText();
-            cursor.insertText(QString(section_image));
+            cursor.insertText(section_image);
             return;
-        } else if (line == "part:text") {
+        } else if (line == "part:caption") {
             cursor.removeSelectedText();
-            cursor.insertText(QString(section_text));
+            cursor.insertText(section_caption);
             return;
         } else if (line == "part:audio") {
             cursor.removeSelectedText();
-            cursor.insertText(QString(section_audio));
+            cursor.insertText(section_audio);
             return;
+        } else if (line == "part:text") {
+            cursor.removeSelectedText();
+            cursor.insertText(section_text);
         }
         cursor.clearSelection();
     }
